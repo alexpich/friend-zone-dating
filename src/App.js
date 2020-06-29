@@ -17,12 +17,8 @@ function App() {
           <Nav />
           <div className="container">
             <Switch>
-              <Route exact path="/" component={Home}>
-                Home
-              </Route>
-              <Route exact path="/signin" component={Signin}>
-                Sign In
-              </Route>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/signin" component={Signin} />
             </Switch>
           </div>
         </Router>
