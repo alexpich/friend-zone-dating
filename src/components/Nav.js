@@ -5,7 +5,7 @@ import { Menu } from "semantic-ui-react";
 class Nav extends Component {
   render() {
     return (
-      <Menu className="nav" secondary>
+      <Menu secondary>
         <Menu.Item name="home" exact as={NavLink} to="/" />
         <Menu.Item as={NavLink} exact to="/signin" name="signin" />
       </Menu>

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-
+import SigninForm from "../components/SigninForm";
 class Signin extends Component {
   render() {
-    return <div>Signin Page</div>;
+    return <SigninForm />;
   }
 }
 
