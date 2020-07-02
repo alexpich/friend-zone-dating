@@ -14,10 +14,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./models");
-db.sequelize.sync();
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+const Role = db.role;
+
+// Use this one in prod, create initial user/admin roles manually
+// db.sequelize.sync();
+
+// We can use this one in dev to force drop all db
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+  initial();
+});
 
 // Test route
 app.get("/", (req, res) => {
@@ -25,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-require("./app/routes/auth.routes")(app);
+require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
 
 // Port

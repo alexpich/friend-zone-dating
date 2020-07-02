@@ -5,8 +5,8 @@ const Role = db.role;
 
 const Op = db.Sequelize.Op;
 
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
+let jwt = require("jsonwebtoken");
+let bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   // Save User to Database
@@ -37,19 +37,21 @@ exports.signup = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({ message: err.message });
+      res.status(500).send({
+        message: err.message || "An error occurred while creating the User.",
+      });
     });
 };
 
 exports.signin = (req, res) => {
   User.findOne({
     where: {
-      username: req.body.username,
+      email: req.body.email,
     },
   })
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "User not found." });
       }
 
       var passwordIsValid = bcrypt.compareSync(
@@ -64,8 +66,9 @@ exports.signin = (req, res) => {
         });
       }
 
+      const oneYear = 1000 * 60 * 60 * 24 * 365;
       var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 31536000, // 1 year
+        expiresIn: oneYear, // 1 year
       });
 
       var authorities = [];
@@ -75,7 +78,6 @@ exports.signin = (req, res) => {
         }
         res.status(200).send({
           id: user.id,
-          username: user.username,
           email: user.email,
           roles: authorities,
           accessToken: token,
