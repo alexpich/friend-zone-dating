@@ -31,14 +31,6 @@ const SigninForm = () => (
             placeholder="Password"
             type="password"
           />
-          <Form.Input
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Confirm Password"
-            type="password"
-          />
-
           <Button color="red" size="small">
             Sign In
           </Button>

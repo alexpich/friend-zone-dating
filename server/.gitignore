@@ -24,4 +24,5 @@ yarn-error.log*
 
 # config
 /config
+auth.config.js
 db.config.js

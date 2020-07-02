@@ -1,42 +1,60 @@
 const db = require("../models");
-const User = db.users;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new User
-exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.userName) {
-    res.status(400).send({
-      message: "Content can not be empty!",
-    });
-    return;
-  }
+// exports.create = (req, res) => {
+//   // Validate request
+//   if (!req.body.email) {
+//     res.status(400).send({
+//       message: "Content can not be empty!",
+//     });
+//     return;
+//   }
+//   if (!req.body.firstName) {
+//     res.status(400).send({
+//       message: "Content can not be empty!",
+//     });
+//     return;
+//   }
+//   if (!req.body.lastName) {
+//     res.status(400).send({
+//       message: "Content can not be empty!",
+//     });
+//     return;
+//   }
+//   if (!req.body.password) {
+//     res.status(400).send({
+//       message: "Content can not be empty!",
+//     });
+//     return;
+//   }
 
-  // Create a User
-  const user = {
-    userName: req.body.userName,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    password: req.body.password,
-  };
+//   // Create a User
+//   const user = {
+//     email: req.body.email,
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     password: req.body.password,
+//   };
 
-  // Save User in the database
-  User.create(user)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "An error occurred while creating the User.",
-      });
-    });
-};
+//   // Save User in the database
+//   User.create(user)
+//     .then((data) => {
+//       res.send(data);
+//     })
+//     .catch((err) => {
+//       res.status(500).send({
+//         message: err.message || "An error occurred while creating the User.",
+//       });
+//     });
+// };
 
-// Retrieve all Users from the database.
+// Retrieve all user from the database.
 exports.findAll = (req, res) => {
-  const userName = req.query.userName;
-  var condition = userName
-    ? { userName: { [Op.like]: `%${userName}%` } }
+  const email = req.query.email;
+  var condition = email
+    ? { email: { [Op.like]: `%${email}%` } }
     : null;
 
   User.findAll({ where: condition })
