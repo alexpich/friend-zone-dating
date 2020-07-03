@@ -67,34 +67,34 @@ const SignupForm = () => {
             password: data.password,
           });
 
-          console.log("user created successfully");
+          console.log("User created successfully");
 
           setUser(initialUserState);
 
           // setSubmitted(true);
-          // setSaved(true);
-          // setErrorMessage(false);
+          setSaved(true);
+          setErrorMessage(false);
+          setEmailError(false);
         })
         .catch((e) => {
           setErrorMessage(true);
           console.log(e);
         });
     } else {
+      setUser(initialUserState);
       setEmailError(true);
       console.log("Invalid email");
     }
-
-    // const newUser = () => {
-    //   setUser(initialUserState);
-    //   setSubmitted(false);
-    // };
   };
 
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>
         {saved && !errorMessage ? (
-          <Message color="green">Account Created!</Message>
+          <Message color="green">
+            Account Created! Please <Link to="/signin">sign in</Link> to
+            continue.
+          </Message>
         ) : (
           ""
         )}
@@ -119,6 +119,11 @@ const SignupForm = () => {
               onChange={handleInputChange}
               name="email"
             />
+            {emailError ? (
+              <Message color="red">That is not a valid email!</Message>
+            ) : (
+              ""
+            )}
             <Form.Input
               fluid
               icon="address card"
