@@ -36,15 +36,6 @@ const SignupForm = () => {
     });
   };
 
-  // function validateEmail(email) {
-  //   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   return re.test(String(email).toLowerCase());
-  // }
-
-  // function validateEmail(email) {
-  //   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   return re.test(email);
-  // }
   function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -59,31 +50,39 @@ const SignupForm = () => {
       password: user.password,
     };
 
-    AuthService.signup(data.email, data.firstName, data.lastName, data.password)
-      .then((response) => {
-        // if(response.data.email)
-        console.log(validateEmail(data.email));
-        console.log(data.email);
-        console.log("response: " + JSON.stringify(response.data));
-        setUser({
-          id: data.id,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          password: data.password,
+    // IF valid email, post to DB
+    if (validateEmail(data.email) === true) {
+      AuthService.signup(
+        data.email,
+        data.firstName,
+        data.lastName,
+        data.password
+      )
+        .then((response) => {
+          setUser({
+            id: data.id,
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            password: data.password,
+          });
+
+          console.log("user created successfully");
+
+          setUser(initialUserState);
+
+          // setSubmitted(true);
+          // setSaved(true);
+          // setErrorMessage(false);
+        })
+        .catch((e) => {
+          setErrorMessage(true);
+          console.log(e);
         });
-
-        console.log("user created successfully");
-
-        setSubmitted(true);
-        setUser(initialUserState);
-        setSaved(true);
-        setErrorMessage(false);
-      })
-      .catch((e) => {
-        setErrorMessage(true);
-        console.log(e);
-      });
+    } else {
+      setEmailError(true);
+      console.log("Invalid email");
+    }
 
     // const newUser = () => {
     //   setUser(initialUserState);
