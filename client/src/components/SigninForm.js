@@ -18,6 +18,9 @@ const SigninForm = () => {
     password: "",
   };
 
+  const [user, setUser] = useState(initialUserState);
+  const [errorMessage, setErrorMessage] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -26,25 +29,26 @@ const SigninForm = () => {
     });
   };
 
-  const [user, setUser] = useState(initialUserState);
-
   const triggerSignIn = (e) => {
+    e.preventDefault();
     let data = {
       email: user.email,
       password: user.password,
     };
 
-    AuthService.signin(data)
+    AuthService.signin(data.email, data.password)
       .then((response) => {
         setUser({
-          email: response.data.email,
-          password: response.data.password,
+          email: response.email,
+          password: response.password,
         });
-        console.log("success");
-        console.log(response.data);
+
+        console.log("successfully logged in");
+        
         setUser(initialUserState);
       })
       .catch((e) => {
+        setErrorMessage(true);
         console.log(e);
       });
   };
@@ -52,6 +56,13 @@ const SigninForm = () => {
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>
+        {errorMessage ? (
+          <Message color="red">
+            Email and password combination incorrect! Please try again.
+          </Message>
+        ) : (
+          ""
+        )}
         <Header as="h2" color="red" textAlign="center">
           <Image src="/logo.png" /> Sign In To Your Account
         </Header>
@@ -62,6 +73,9 @@ const SigninForm = () => {
               icon="user"
               iconPosition="left"
               placeholder="E-mail address"
+              value={user.email}
+              onChange={handleInputChange}
+              name="email"
             />
             <Form.Input
               fluid
@@ -69,8 +83,16 @@ const SigninForm = () => {
               iconPosition="left"
               placeholder="Password"
               type="password"
+              value={user.password}
+              onChange={handleInputChange}
+              name="password"
             />
-            <Button color="red" size="small" onClick={triggerSignIn}>
+            <Button
+              color="red"
+              size="small"
+              onClick={triggerSignIn}
+              disabled={!user.email || !user.password}
+            >
               Sign In
             </Button>
           </Segment>

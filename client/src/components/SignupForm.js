@@ -11,7 +11,6 @@ import {
 } from "semantic-ui-react";
 
 import AuthService from "../services/auth.service";
-import UserService from "../services/user.service";
 
 const SignupForm = () => {
   const initialUserState = {
@@ -25,6 +24,7 @@ const SignupForm = () => {
   const [user, setUser] = useState(initialUserState);
   const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +45,6 @@ const SignupForm = () => {
 
     AuthService.signup(data.email, data.firstName, data.lastName, data.password)
       .then((response) => {
-        console.log(response);
         setUser({
           id: response.data.id,
           email: response.data.email,
@@ -53,13 +52,16 @@ const SignupForm = () => {
           lastName: response.data.lastName,
           password: response.data.password,
         });
-        console.log("success");
+        
+        console.log("user created successfully");
+
         setSubmitted(true);
-        console.log(response.data);
         setUser(initialUserState);
         setSaved(true);
+        setErrorMessage(false);
       })
       .catch((e) => {
+        setErrorMessage(true);
         console.log(e);
       });
 
@@ -72,7 +74,18 @@ const SignupForm = () => {
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>
-        {saved ? <Message color="green">Account Created!</Message> : ""}
+        {saved && !errorMessage ? (
+          <Message color="green">Account Created!</Message>
+        ) : (
+          ""
+        )}
+        {errorMessage ? (
+          <Message color="red">
+            There was an error creating an account. Please check again!
+          </Message>
+        ) : (
+          ""
+        )}
         <Header as="h2" color="red" textAlign="center">
           <Image src="/logo.png" /> Create An Account
         </Header>

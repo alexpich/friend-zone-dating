@@ -25,15 +25,12 @@ class AuthService {
   }
 
   signup(email, firstName, lastName, password) {
-    return axios.post(
-      API_URL + "signup",
-      {
-        email,
-        firstName,
-        lastName,
-        password,
-      }
-    );
+    return axios.post(API_URL + "signup", {
+      email,
+      firstName,
+      lastName,
+      password,
+    });
   }
 
   getCurrentUser() {
