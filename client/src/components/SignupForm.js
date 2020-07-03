@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Router } from "react-router-dom";
 import {
   Button,
   Form,
@@ -24,7 +24,9 @@ const SignupForm = () => {
   const [user, setUser] = useState(initialUserState);
   const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +35,20 @@ const SignupForm = () => {
       [name]: value,
     });
   };
+
+  // function validateEmail(email) {
+  //   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   return re.test(String(email).toLowerCase());
+  // }
+
+  // function validateEmail(email) {
+  //   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   return re.test(email);
+  // }
+  function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
 
   const saveUser = (e) => {
     e.preventDefault();
@@ -45,14 +61,18 @@ const SignupForm = () => {
 
     AuthService.signup(data.email, data.firstName, data.lastName, data.password)
       .then((response) => {
+        // if(response.data.email)
+        console.log(validateEmail(data.email));
+        console.log(data.email);
+        console.log("response: " + JSON.stringify(response.data));
         setUser({
-          id: response.data.id,
-          email: response.data.email,
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          password: response.data.password,
+          id: data.id,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          password: data.password,
         });
-        
+
         console.log("user created successfully");
 
         setSubmitted(true);
