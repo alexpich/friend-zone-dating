@@ -2,10 +2,6 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-// Redux
-import { Provider } from "react-redux";
-import store from "./redux/store";
-
 // Components
 import Nav from "./components/Nav";
 
@@ -18,24 +14,22 @@ import Signup from "./pages/signup";
 
 function App() {
   return (
-    <Provider store={store}>
-      <div className="App">
-        <header className="App-header">
-          <Router>
-            <Nav />
-            <div className="container">
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/friends" component={Friends} />
-                <Route exact path="/messages" component={Messages} />
-                <Route exact path="/signin" component={Signin} />
-                <Route exact path="/signup" component={Signup} />
-              </Switch>
-            </div>
-          </Router>
-        </header>
-      </div>
-    </Provider>
+    <div className="App">
+      <header className="App-header">
+        <Router>
+          <Nav />
+          <div className="container">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/friends" component={Friends} />
+              <Route exact path="/messages" component={Messages} />
+              <Route exact path="/signin" component={Signin} />
+              <Route exact path="/signup" component={Signup} />
+            </Switch>
+          </div>
+        </Router>
+      </header>
+    </div>
   );
 }
 

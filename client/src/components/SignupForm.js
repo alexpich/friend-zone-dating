@@ -10,7 +10,8 @@ import {
   Segment,
 } from "semantic-ui-react";
 
-import UserDataService from "../services/user.service";
+import AuthService from "../services/auth.service";
+import UserService from "../services/user.service";
 
 const SignupForm = () => {
   const initialUserState = {
@@ -42,8 +43,9 @@ const SignupForm = () => {
       password: user.password,
     };
 
-    UserDataService.create(data)
+    AuthService.signup(data.email, data.firstName, data.lastName, data.password)
       .then((response) => {
+        console.log(response);
         setUser({
           id: response.data.id,
           email: response.data.email,
@@ -51,6 +53,7 @@ const SignupForm = () => {
           lastName: response.data.lastName,
           password: response.data.password,
         });
+        console.log("success");
         setSubmitted(true);
         console.log(response.data);
         setUser(initialUserState);
@@ -60,10 +63,10 @@ const SignupForm = () => {
         console.log(e);
       });
 
-    const newUser = () => {
-      setUser(initialUserState);
-      setSubmitted(false);
-    };
+    // const newUser = () => {
+    //   setUser(initialUserState);
+    //   setSubmitted(false);
+    // };
   };
 
   return (

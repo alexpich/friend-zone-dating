@@ -9,8 +9,18 @@ module.exports = (app) => {
     );
     next();
   });
-  
+
+  // Router level middleware
   var router = require("express").Router();
+
+  //test routes
+  app.get("/api/test/all", users.allAccess);
+  app.get("/api/test/user", [authJwt.verifyToken], users.userBoard);
+  app.get(
+    "/api/test/admin",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    users.adminBoard
+  );
 
   // Create a new User
   // router.post("/", users.create);
