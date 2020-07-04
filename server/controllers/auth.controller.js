@@ -8,39 +8,47 @@ const Op = db.Sequelize.Op;
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
+function validateEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
 exports.signup = (req, res) => {
-  // Save User to Database
-  User.create({
-    email: req.body.email,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    password: bcrypt.hashSync(req.body.password, 8),
-  })
-    .then((user) => {
-      if (req.body.roles) {
-        Role.findAll({
-          where: {
-            name: {
-              [Op.or]: req.body.roles,
+  if (validateEmail(req.body.email) === true) {
+    // Save User to Database
+    User.create({
+      email: req.body.email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      password: bcrypt.hashSync(req.body.password, 8),
+    })
+      .then((user) => {
+        if (req.body.roles) {
+          Role.findAll({
+            where: {
+              name: {
+                [Op.or]: req.body.roles,
+              },
             },
-          },
-        }).then((roles) => {
-          user.setRoles(roles).then(() => {
+          }).then((roles) => {
+            user.setRoles(roles).then(() => {
+              res.send({ message: "User was registered successfully!" });
+            });
+          });
+        } else {
+          // user role = 1
+          user.setRoles([1]).then(() => {
             res.send({ message: "User was registered successfully!" });
           });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || "An error occurred while creating the User.",
         });
-      } else {
-        // user role = 1
-        user.setRoles([1]).then(() => {
-          res.send({ message: "User was registered successfully!" });
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "An error occurred while creating the User.",
       });
-    });
+  } else {
+  }
 };
 
 exports.signin = (req, res) => {

@@ -22,11 +22,11 @@ const SignupForm = () => {
   };
 
   const [user, setUser] = useState(initialUserState);
-  const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [error, setError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +50,7 @@ const SignupForm = () => {
       password: user.password,
     };
 
+    // TODO: Validate password length
     // IF valid email, post to DB
     if (validateEmail(data.email) === true) {
       AuthService.signup(
@@ -67,44 +68,37 @@ const SignupForm = () => {
             password: data.password,
           });
 
-          console.log("user created successfully");
+          console.log("User created successfully");
 
           setUser(initialUserState);
 
-          // setSubmitted(true);
-          // setSaved(true);
-          // setErrorMessage(false);
+          setSaved(true);
+          setError(false);
+          setEmailError(false);
         })
         .catch((e) => {
-          setErrorMessage(true);
-          console.log(e);
+          setError(true);
+          setErrorMessage(e.response.data.message);
         });
     } else {
+      setUser(initialUserState);
       setEmailError(true);
       console.log("Invalid email");
     }
-
-    // const newUser = () => {
-    //   setUser(initialUserState);
-    //   setSubmitted(false);
-    // };
   };
 
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>
-        {saved && !errorMessage ? (
-          <Message color="green">Account Created!</Message>
-        ) : (
-          ""
-        )}
-        {errorMessage ? (
-          <Message color="red">
-            There was an error creating an account. Please check again!
+        {saved && !error ? (
+          <Message color="green">
+            Account Created! Please <Link to="/signin">sign in</Link> to
+            continue.
           </Message>
         ) : (
           ""
         )}
+        {error ? <Message color="red">{errorMessage.toString()}</Message> : ""}
         <Header as="h2" color="red" textAlign="center">
           <Image src="/logo.png" /> Create An Account
         </Header>
@@ -119,6 +113,11 @@ const SignupForm = () => {
               onChange={handleInputChange}
               name="email"
             />
+            {emailError ? (
+              <Message color="red">That is not a valid email!</Message>
+            ) : (
+              ""
+            )}
             <Form.Input
               fluid
               icon="address card"
