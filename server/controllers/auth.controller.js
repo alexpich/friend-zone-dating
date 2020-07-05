@@ -8,13 +8,73 @@ const Op = db.Sequelize.Op;
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
+// function validateEmail(email) {
+//   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//   return re.test(email);
+// }
+
+// Returns true if valid email
 function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
 
+// Returns true if valid firstName
+function validateFirstName(firstName) {
+  const re = /^[a-zA-Z]{2,30}$/;
+  return re.test(firstName);
+}
+
+// Returns true if valid lastName
+function validateLastName(lastName) {
+  const re = /^[a-zA-Z]{2,30}$/;
+  return re.test(lastName);
+}
+
+// Returns true if valid password
+function validatePassword(password) {
+  // Must contain 1 digit, 1+ lowercase, 1+ uppercase, 6+ characters
+  const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,20}$/;
+  return re.test(password);
+}
+
+// Returns true if valid
+function validate(email, firstName, lastName, password) {
+  let numErrors = 0;
+  if (!validateEmail(email)) {
+    numErrors++;
+  }
+
+  if (!validateFirstName(firstName)) {
+    numErrors++;
+  }
+
+  if (!validateLastName(lastName)) {
+    numErrors++;
+  }
+
+  if (!validatePassword(password)) {
+    numErrors++;
+  }
+
+  console.log(numErrors);
+
+  if (numErrors > 0) {
+    return false;
+  }
+  return true;
+}
+
 exports.signup = (req, res) => {
-  if (validateEmail(req.body.email) === true) {
+  // if (validateEmail(req.body.email) === true) {
+  if (
+    validate(
+      req.body.email,
+      req.body.firstName,
+      req.body.lastName,
+      req.body.password
+    )
+  ) {
     // Save User to Database
     User.create({
       email: req.body.email,
@@ -48,6 +108,7 @@ exports.signup = (req, res) => {
         });
       });
   } else {
+    console.log(`There are: ${numErrors} errors in the form.`);
   }
 };
 
