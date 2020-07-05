@@ -39,12 +39,12 @@ const SigninForm = () => {
     AuthService.signin(data.email, data.password)
       .then((response) => {
         setUser({
-          email: response.email,
-          password: response.password,
+          email: data.email,
+          password: data.password,
         });
 
         console.log("successfully logged in");
-        
+
         setUser(initialUserState);
       })
       .catch((e) => {

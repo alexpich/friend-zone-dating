@@ -58,6 +58,7 @@ function validate(email, firstName, lastName, password) {
   }
 
   console.log(numErrors);
+  // console.log(`There are: ${numErrors} errors in the form.`);
 
   if (numErrors > 0) {
     return false;
@@ -66,7 +67,6 @@ function validate(email, firstName, lastName, password) {
 }
 
 exports.signup = (req, res) => {
-  // if (validateEmail(req.body.email) === true) {
   if (
     validate(
       req.body.email,
