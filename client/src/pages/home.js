@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Grid } from "semantic-ui-react";
 
 import SidebarNav from "../components/SidebarNav";
-import NewsFeed from "../components/NewsFeed";
+import PotentialMatches from "../components/PotentialMatches";
 
 class Home extends Component {
   render() {
@@ -13,7 +13,7 @@ class Home extends Component {
           <SidebarNav />
         </Grid.Column>
         <Grid.Column>
-          <NewsFeed />
+          <PotentialMatches />
         </Grid.Column>
       </Grid>
     );
