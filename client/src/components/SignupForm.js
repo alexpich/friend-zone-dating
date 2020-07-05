@@ -37,17 +37,23 @@ const SignupForm = () => {
     passwordError: false,
   };
 
+  // User data
   const [user, setUser] = useState(initialUserState);
+
+  // Form submission (save user data to db)
   const [saved, setSaved] = useState(false);
 
+  // Entire Form Error check
   const [error, setError] = useState(false);
 
+  // Error Message above form
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Input Error Check
   const [emailError, setEmailError] = useState(false);
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +63,7 @@ const SignupForm = () => {
     });
   };
 
-  // returns true if valid email
+  // Returns true if valid email
   function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(email)) {
@@ -68,7 +74,7 @@ const SignupForm = () => {
     return false;
   }
 
-  // returns true if valid firstName
+  // Returns true if valid firstName
   function validateFirstName(firstName) {
     const re = /^[a-zA-Z]{2,30}$/;
     if (re.test(firstName)) {
@@ -79,7 +85,7 @@ const SignupForm = () => {
     return false;
   }
 
-  // returns true if valid lastName
+  // Returns true if valid lastName
   function validateLastName(lastName) {
     const re = /^[a-zA-Z]{2,30}$/;
     if (re.test(lastName)) {
@@ -90,7 +96,7 @@ const SignupForm = () => {
     return false;
   }
 
-  // returns true if valid password
+  // Returns true if valid password
   function validatePassword(password) {
     // Must contain 1 digit, 1+ lowercase, 1+ uppercase, 6+ characters
     const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,20}$/;
@@ -102,7 +108,7 @@ const SignupForm = () => {
     return false;
   }
 
-  // returns true if valid
+  // Returns true if valid
   function validate(email, firstName, lastName, password) {
     let numErrors = 0;
     if (!validateEmail(email)) {
@@ -112,9 +118,11 @@ const SignupForm = () => {
     if (!validateFirstName(firstName)) {
       numErrors++;
     }
+
     if (!validateLastName(lastName)) {
       numErrors++;
     }
+
     if (!validatePassword(password)) {
       numErrors++;
     }
