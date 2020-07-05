@@ -7,7 +7,7 @@ import Nav from "./components/Nav";
 
 // Pages
 import Home from "./pages/home";
-import Friends from "./pages/friends";
+import Matches from "./pages/matches";
 import Messages from "./pages/messages";
 import Signin from "./pages/signin";
 import Signup from "./pages/signup";
@@ -21,7 +21,7 @@ function App() {
           <div className="container">
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/friends" component={Friends} />
+              <Route exact path="/matches" component={Matches} />
               <Route exact path="/messages" component={Messages} />
               <Route exact path="/signin" component={Signin} />
               <Route exact path="/signup" component={Signup} />

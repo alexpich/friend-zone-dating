@@ -15,7 +15,7 @@ class SidebarNav extends Component {
         <Menu secondary vertical>
           <Menu.Item name="home" exact as={NavLink} to="/" />
           <Menu.Item as={NavLink} exact to="/messages" name="messages" />
-          <Menu.Item as={NavLink} exact to="/friends" name="friends" />
+          <Menu.Item as={NavLink} exact to="/matches" name="matches" />
         </Menu>
       </SidebarNavStyles>
     );

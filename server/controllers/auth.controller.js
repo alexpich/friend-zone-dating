@@ -8,11 +8,6 @@ const Op = db.Sequelize.Op;
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
-// function validateEmail(email) {
-//   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//   return re.test(email);
-// }
-
 // Returns true if valid email
 function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -57,8 +52,7 @@ function validate(email, firstName, lastName, password) {
     numErrors++;
   }
 
-  console.log(numErrors);
-  // console.log(`There are: ${numErrors} errors in the form.`);
+  console.log(`There are: ${numErrors} errors in the form.`);
 
   if (numErrors > 0) {
     return false;
