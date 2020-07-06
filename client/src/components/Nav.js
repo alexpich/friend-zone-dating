@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 
@@ -19,7 +19,7 @@ const Nav = () => {
     <Menu secondary fixed="top">
       {userFromSession !== null ? (
         <>
-          <Menu.Item name="home" exact as={NavLink} to="/" />
+          <Menu.Item name="lovezone" exact as={NavLink} to="/lovezone" />
           <Menu.Item
             as={NavLink}
             exact

@@ -3,10 +3,9 @@ import { Grid } from "semantic-ui-react";
 
 import SidebarNav from "../components/SidebarNav";
 import LoveZoneComponent from "../components/LoveZoneComponent";
-import ProtectedRoute from "../components/ProtectedRoute";
 
 const Matches = () => (
-  <ProtectedRoute>
+  <div className="container">
     <Grid columns={2} stackable>
       <Grid.Column width={4}>
         <SidebarNav />
@@ -15,7 +14,7 @@ const Matches = () => (
         <LoveZoneComponent />
       </Grid.Column>
     </Grid>
-  </ProtectedRoute>
+  </div>
 );
 
 export default Matches;

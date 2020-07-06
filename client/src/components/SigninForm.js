@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Button,
   Form,
@@ -24,7 +24,8 @@ const SigninForm = () => {
 
   const [user, setUser] = useState(initialUserState);
   const [errorMessage, setErrorMessage] = useState(false);
-  const [redirect, setRedirect] = useState(null);
+
+  const history = useHistory();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,11 +55,11 @@ const SigninForm = () => {
         setCurrentUser(userFromSession);
         console.log("successfully logged in");
 
-        //redirect
-        setRedirect(true);
-
         // Clears the form
         setUser(initialUserState);
+
+        // Redirect
+        history.push("/lovezone");
       })
       .catch((e) => {
         setErrorMessage(true);
@@ -108,7 +109,6 @@ const SigninForm = () => {
             >
               Sign In
             </Button>
-            {redirect ? <Redirect to="/" /> : ""}
           </Segment>
         </Form>
         <Message>
