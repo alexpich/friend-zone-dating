@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import AuthService from "./services/auth.service";
+
 import { UserContext } from "./context/UserContext";
 
 // Components
@@ -19,41 +20,23 @@ import Signup from "./pages/signup";
 
 function App() {
   // const user = AuthService.getCurrentUser();
-  // const [isSignedIn, setIsSignedIn] = useState(false);
-  // const [currentUser, setCurrentUser] = useState(user ? user : null);
-
-  // console.log("user:" + JSON.stringify(user));
-  // console.log("before" + JSON.stringify(currentUser));
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     setCurrentUser(user);
-  //   }
-  // }, []);
-
-  // console.log("after" + JSON.stringify(currentUser));
-
-  // const logout = () => {
-  //   AuthService.signout();
-  // };
-
-  // const UserContext = React.createContext(null);
-  // const [loggedIn, setIsloggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+
+  // const userFromSession = AuthService.getCurrentUser();
+  // if (userFromSession) {
+  //   setCurrentUser(userFromSession);
+  // }
 
   const currentUserValue = useMemo(() => ({ currentUser, setCurrentUser }), [
     currentUser,
     setCurrentUser,
   ]);
-  // const providerValue = useMemo(
-  //   () => ({ loggedIn, setIsloggedIn }, [loggedIn, setIsloggedIn])
-  // );
 
   return (
-    <UserContext.Provider value={currentUserValue}>
-      <div className="App">
-        <header className="App-header">
-          <Router>
+    <div className="App">
+      <header className="App-header">
+        <Router>
+          <UserContext.Provider value={currentUserValue}>
             <Nav />
             <div className="container">
               <Switch>
@@ -66,10 +49,10 @@ function App() {
                 <Route exact path="/signup" component={Signup} />
               </Switch>
             </div>
-          </Router>
-        </header>
-      </div>
-    </UserContext.Provider>
+          </UserContext.Provider>
+        </Router>
+      </header>
+    </div>
   );
 }
 

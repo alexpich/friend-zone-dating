@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import {
   Button,
   Form,
@@ -21,12 +21,10 @@ const SigninForm = () => {
   };
 
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const retrievedUser = AuthService.getCurrentUser();
-
-  // setCurrentUser(retrievedUser);
 
   const [user, setUser] = useState(initialUserState);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [redirect, setRedirect] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +34,7 @@ const SigninForm = () => {
     });
   };
 
-  const triggerSignIn = (e) => {
+  const signinHandler = (e) => {
     e.preventDefault();
     let data = {
       email: user.email,
@@ -50,9 +48,16 @@ const SigninForm = () => {
           password: data.password,
         });
 
-        setCurrentUser(retrievedUser);
+        const userFromSession = AuthService.getCurrentUser();
+
+        // Set the context state
+        setCurrentUser(userFromSession);
         console.log("successfully logged in");
 
+        //redirect
+        setRedirect(true);
+
+        // Clears the form
         setUser(initialUserState);
       })
       .catch((e) => {
@@ -98,11 +103,12 @@ const SigninForm = () => {
             <Button
               color="red"
               size="small"
-              onClick={triggerSignIn}
+              onClick={signinHandler}
               disabled={!user.email || !user.password}
             >
               Sign In
             </Button>
+            {redirect ? <Redirect to="/" /> : ""}
           </Segment>
         </Form>
         <Message>

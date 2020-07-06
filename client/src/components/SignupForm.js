@@ -127,8 +127,6 @@ const SignupForm = () => {
       numErrors++;
     }
 
-    console.log(numErrors);
-
     if (numErrors > 0) {
       return false;
     }
