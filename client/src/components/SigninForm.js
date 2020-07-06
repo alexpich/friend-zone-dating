@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -12,11 +12,18 @@ import {
 
 import AuthService from "../services/auth.service";
 
+import { UserContext } from "../context/UserContext";
+
 const SigninForm = () => {
   const initialUserState = {
     email: "",
     password: "",
   };
+
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const retrievedUser = AuthService.getCurrentUser();
+
+  // setCurrentUser(retrievedUser);
 
   const [user, setUser] = useState(initialUserState);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -43,13 +50,14 @@ const SigninForm = () => {
           password: data.password,
         });
 
+        setCurrentUser(retrievedUser);
         console.log("successfully logged in");
 
         setUser(initialUserState);
       })
       .catch((e) => {
         setErrorMessage(true);
-        console.log(e);
+        console.log("catch: " + e);
       });
   };
 
