@@ -55,9 +55,6 @@ const SigninForm = () => {
         setCurrentUser(userFromSession);
         console.log("successfully logged in");
 
-        // Clears the form
-        setUser(initialUserState);
-
         // Redirect
         history.push("/lovezone");
       })

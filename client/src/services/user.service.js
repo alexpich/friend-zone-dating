@@ -7,29 +7,15 @@ const API_URL = "http://localhost:5000/api/auth/";
 const API_URL_TEST = "http://localhost:5000/api/test/";
 
 class UserService {
-  //test
-  getPublicContent() {
-    return axios.get(API_URL_TEST + "all");
-  }
-  getUserBoard() {
-    return axios.get(API_URL_TEST + "user", { headers: authHeader() });
-  }
-  getModeratorBoard() {
-    return axios.get(API_URL_TEST + "mod", { headers: authHeader() });
-  }
-  getAdminBoard() {
-    return axios.get(API_URL_TEST + "admin", { headers: authHeader() });
-  }
-
   // TODO: Fix these
   getAll() {
     // return http.get("/users");
-    // return axios.get("/users");
+    return axios.get("/users");
   }
 
   get(id) {
     // return http.get(`/users/${id}`);
-    // return axios.get(`/users/${id}`);
+    return axios.get(`/users/${id}`);
   }
 
   create(data) {
@@ -38,11 +24,11 @@ class UserService {
   }
 
   update(id, data) {
-    // return axios.put(`/users/${id}`, data);
+    return axios.put(`/users/${id}`, data);
   }
 
   delete(id) {
-    // return axios.delete(`/users/${id}`);
+    return axios.delete(`/users/${id}`);
   }
 
   deleteAll() {
@@ -50,15 +36,15 @@ class UserService {
   }
 
   findByEmail(email) {
-    // return axios.get(`/users?email=${email}`);
+    return axios.get(`/users?email=${email}`);
   }
 
   findByFirstName(firstName) {
-    // return axios.get(`/users?firstName=${firstName}`);
+    return axios.get(`/users?firstName=${firstName}`);
   }
 
   findByLastName(lastName) {
-    // return axios.get(`/users?lastName=${lastName}`);
+    return axios.get(`/users?lastName=${lastName}`);
   }
 }
 

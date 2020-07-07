@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 
@@ -8,6 +8,12 @@ import { UserContext } from "../context/UserContext";
 const Nav = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const userFromSession = AuthService.getCurrentUser();
+
+  useEffect(() => {
+    if (userFromSession !== null) {
+      setCurrentUser(userFromSession);
+    }
+  }, []);
 
   const logout = () => {
     AuthService.signout();

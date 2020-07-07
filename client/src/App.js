@@ -7,6 +7,7 @@ import { UserContext } from "./context/UserContext";
 // Components
 import Nav from "./components/Nav";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotSignedInRoute from "./components/NotSignedInRoute";
 
 // Pages
 import Home from "./pages/home";
@@ -33,13 +34,14 @@ function App() {
             <Nav />
             <div>
               <Switch>
-                <Route exact path="/" component={Home} />
+                <NotSignedInRoute exact path="/" component={Home} />
                 <ProtectedRoute exact path="/lovezone" component={LoveZone} />
                 <ProtectedRoute exact path="/matches" component={Matches} />
                 <ProtectedRoute exact path="/messages" component={Messages} />
                 <ProtectedRoute exact path="/profile" component={Profile} />
-                <Route exact path="/signin" component={Signin} />
-                <Route exact path="/signup" component={Signup} />
+                <NotSignedInRoute exact path="/signin" component={Signin} />
+                <NotSignedInRoute exact path="/signup" component={Signup} />
+                <NotSignedInRoute path="/" component={Home} />
               </Switch>
             </div>
           </UserContext.Provider>
