@@ -8,7 +8,6 @@ const NotSignedInRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = currentUser;
   // const isAuthenticated = AuthService.getCurrentUser();
 
-  // This will redirect to the same route no matter what if the user is loggedin
   return (
     <Route
       {...rest}
@@ -18,10 +17,10 @@ const NotSignedInRoute = ({ component: Component, ...rest }) => {
             to={{ pathname: "/lovezone", state: { from: props.location } }}
           />
         ) : (
-          // <Component {...props} />
-          <Redirect
-            to={{ pathname: "/lovezone", state: { from: props.location } }}
-          />
+          <Component {...props} />
+          // <Redirect
+          //   to={{ pathname: "/", state: { from: props.location } }}
+          // />
         )
       }
     />
