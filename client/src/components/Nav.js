@@ -18,7 +18,6 @@ const Nav = () => {
   const logout = () => {
     AuthService.signout();
     setCurrentUser(null);
-    window.location.reload();
   };
 
   return (

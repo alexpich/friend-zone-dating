@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import AuthService from "../services/auth.service";
 
 const NotSignedInRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = AuthService.getCurrentUser();
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const isAuthenticated = currentUser;
+  // const isAuthenticated = AuthService.getCurrentUser();
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        !isAuthenticated ? (
-          <Component {...props} />
-        ) : (
+        isAuthenticated ? (
           <Redirect
             to={{ pathname: "/lovezone", state: { from: props.location } }}
           />
+        ) : (
+          <Component {...props} />
+          // <Redirect
+          //   to={{ pathname: "/", state: { from: props.location } }}
+          // />
         )
       }
     />
