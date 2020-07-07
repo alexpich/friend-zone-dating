@@ -1,0 +1,6 @@
+"scripts": {
+    "frontend": "cd client && npm start",
+    "api": "cd server && nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run frontend\"",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
