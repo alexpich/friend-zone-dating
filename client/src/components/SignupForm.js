@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Router } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   Button,
@@ -126,8 +126,6 @@ const SignupForm = () => {
     if (!validatePassword(password)) {
       numErrors++;
     }
-
-    console.log(numErrors);
 
     if (numErrors > 0) {
       return false;

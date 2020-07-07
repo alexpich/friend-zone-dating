@@ -5,10 +5,12 @@ body {
 }
 
 .container {
+  margin-top: 4rem;
 }
 
-.ui.menu {
-  /* margin: 0; */
+.ui.menu.secondary {
+  margin: 0;
+  padding: 0;
 }
 
 .ui.stacked.segment:after {

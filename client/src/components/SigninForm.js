@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
   Button,
   Form,
@@ -12,14 +12,20 @@ import {
 
 import AuthService from "../services/auth.service";
 
+import { UserContext } from "../context/UserContext";
+
 const SigninForm = () => {
   const initialUserState = {
     email: "",
     password: "",
   };
 
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+
   const [user, setUser] = useState(initialUserState);
   const [errorMessage, setErrorMessage] = useState(false);
+
+  const history = useHistory();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +35,7 @@ const SigninForm = () => {
     });
   };
 
-  const triggerSignIn = (e) => {
+  const signinHandler = (e) => {
     e.preventDefault();
     let data = {
       email: user.email,
@@ -39,17 +45,22 @@ const SigninForm = () => {
     AuthService.signin(data.email, data.password)
       .then((response) => {
         setUser({
-          email: response.email,
-          password: response.password,
+          email: data.email,
+          password: data.password,
         });
 
+        const userFromSession = AuthService.getCurrentUser();
+
+        // Set the context state
+        setCurrentUser(userFromSession);
         console.log("successfully logged in");
-        
-        setUser(initialUserState);
+
+        // Redirect
+        history.push("/lovezone");
       })
       .catch((e) => {
         setErrorMessage(true);
-        console.log(e);
+        console.log("catch: " + e);
       });
   };
 
@@ -90,7 +101,7 @@ const SigninForm = () => {
             <Button
               color="red"
               size="small"
-              onClick={triggerSignIn}
+              onClick={signinHandler}
               disabled={!user.email || !user.password}
             >
               Sign In

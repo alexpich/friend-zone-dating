@@ -1,32 +1,50 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import { UserContext } from "./context/UserContext";
+
 // Components
 import Nav from "./components/Nav";
+import ProtectedRoute from "./components/ProtectedRoute";
+import NotSignedInRoute from "./components/NotSignedInRoute";
 
 // Pages
 import Home from "./pages/home";
-import Friends from "./pages/friends";
+import LoveZone from "./pages/lovezone";
+import Matches from "./pages/matches";
 import Messages from "./pages/messages";
+import Profile from "./pages/profile";
 import Signin from "./pages/signin";
 import Signup from "./pages/signup";
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const currentUserValue = useMemo(() => ({ currentUser, setCurrentUser }), [
+    currentUser,
+    setCurrentUser,
+  ]);
+
   return (
     <div className="App">
       <header className="App-header">
         <Router>
-          <Nav />
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/friends" component={Friends} />
-              <Route exact path="/messages" component={Messages} />
-              <Route exact path="/signin" component={Signin} />
-              <Route exact path="/signup" component={Signup} />
-            </Switch>
-          </div>
+          <UserContext.Provider value={currentUserValue}>
+            <Nav />
+            <div>
+              <Switch>
+                <NotSignedInRoute exact path="/" component={Home} />
+                <ProtectedRoute exact path="/lovezone" component={LoveZone} />
+                <ProtectedRoute exact path="/matches" component={Matches} />
+                <ProtectedRoute exact path="/messages" component={Messages} />
+                <ProtectedRoute exact path="/profile" component={Profile} />
+                <NotSignedInRoute exact path="/signin" component={Signin} />
+                <NotSignedInRoute exact path="/signup" component={Signup} />
+                <NotSignedInRoute path="/" component={Home} />
+              </Switch>
+            </div>
+          </UserContext.Provider>
         </Router>
       </header>
     </div>

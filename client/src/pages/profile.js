@@ -2,19 +2,19 @@ import React from "react";
 import { Grid } from "semantic-ui-react";
 
 import SidebarNav from "../components/SidebarNav";
-import MessagesComponent from "../components/MessagesComponent";
+import ProfileComponent from "../components/ProfileComponent";
 
-const Messages = () => (
+const Profile = () => (
   <div className="container">
     <Grid columns={2} stackable>
       <Grid.Column width={4}>
         <SidebarNav />
       </Grid.Column>
       <Grid.Column>
-        <MessagesComponent />
+        <ProfileComponent />
       </Grid.Column>
     </Grid>
   </div>
 );
 
-export default Messages;
+export default Profile;
