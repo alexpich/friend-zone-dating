@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 
 import { Button, Grid } from "semantic-ui-react";
 
+import SignUpButton from "./styles/SignUpButton";
 import HomeBg from "../assets/home-bg.jpg";
 
 const HomeStyles = styled.div`
   background-image: url(${HomeBg});
   background-size: cover;
   background-repeat: no-repeat;
-  width: 100vw;
-  height: 100vh;
+  background-position: center;
+  /* width: 100vw; */
+  /* height: 100vh; */
   /* margin-top: -4rem; */
   color: white;
   h2,
@@ -42,9 +44,12 @@ const HomeComponent = () => {
         <Grid.Column style={{ maxWidth: 1200 }}>
           <h2>Find Your Match</h2>
           <h3>Or Send Them To The FriendZone...</h3>
-          <Button color="red" size="large">
+          <SignUpButton >
             <Link to="/signup">Sign Up</Link>
-          </Button>
+          </SignUpButton>
+          {/* <Button color="red" size="large">
+            <Link to="/signup">Sign Up</Link>
+          </Button> */}
         </Grid.Column>
       </Grid>
     </HomeStyles>
