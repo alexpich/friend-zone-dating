@@ -18,39 +18,29 @@ const ProfileCard = styled.div`
 const EditPhotosContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  img {
+    object-fit: cover;
+    width: 120px;
+    height: 150px;
+  }
 `;
 
 const UploadImage1 = styled.div`
   background: #ededed;
   width: 120px;
   height: 150px;
-  img {
-    object-fit: cover;
-    width: 120px;
-    height: 150px;
-  }
 `;
 
 const UploadImage2 = styled.div`
   background: #ededed;
   width: 120px;
   height: 150px;
-  img {
-    object-fit: cover;
-    width: 120px;
-    height: 150px;
-  }
 `;
 
 const UploadImage3 = styled.div`
   background: #ededed;
   width: 120px;
   height: 150px;
-  img {
-    object-fit: cover;
-    width: 120px;
-    height: 150px;
-  }
 `;
 
 const uploadFile = async (e) => {
