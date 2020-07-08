@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { UserContext } from "../context/UserContext";
 import axios from "axios";
+
+import { Container, Form, Segment, TextArea } from "semantic-ui-react";
+
+import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
 import UserService from "../services/user.service";
 
@@ -9,9 +12,13 @@ import UserService from "../services/user.service";
 
 const ProfileCard = styled.div`
   border: 1px solid black;
-  height: 50vh;
+  /* height: 600px; */
   .name {
     text-transform: capitalize;
+  }
+
+  .about {
+    resize: none;
   }
 `;
 
@@ -148,10 +155,14 @@ const uploadFile3 = async (e) => {
 const EditProfileComponent = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
+  //   Images
   const [hasImage, setHasImage] = useState(false);
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
+
+  //    About
+  //   const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
 
   useEffect(() => {
     if (currentUser) {
@@ -174,54 +185,66 @@ const EditProfileComponent = () => {
 
   return (
     <div>
-      <h1>EditProfileComponent</h1>
+      {/* <h1>EditProfileComponent</h1> */}
       <ProfileCard>
-        <input
-          style={{ display: "none" }}
-          type="file"
-          id="file"
-          name="file"
-          placeholder="Upload an image"
-          required
-          onChange={uploadFile}
-          ref={(fileInput) => (initialFileInput1 = fileInput)}
-        />
-        <input
-          style={{ display: "none" }}
-          type="file"
-          id="file"
-          name="file"
-          placeholder="Upload an image"
-          required
-          onChange={uploadFile2}
-          ref={(fileInput) => (initialFileInput2 = fileInput)}
-        />
-        <input
-          style={{ display: "none" }}
-          type="file"
-          id="file"
-          name="file"
-          placeholder="Upload an image"
-          required
-          onChange={uploadFile3}
-          ref={(fileInput) => (initialFileInput3 = fileInput)}
-        />
-        <EditPhotosContainer>
-          <UploadImage1 onClick={() => initialFileInput1.click()}>
-            {imageOne ? <img src={imageOne} alt="Default" /> : ""}
-          </UploadImage1>
-          <UploadImage2 onClick={() => initialFileInput2.click()}>
-            {imageTwo ? <img src={imageTwo} alt="Default" /> : ""}
-          </UploadImage2>
-          <UploadImage3 onClick={() => initialFileInput3.click()}>
-            {imageThree ? <img src={imageThree} alt="Default" /> : ""}
-          </UploadImage3>
-        </EditPhotosContainer>
-        <p>id: {currentUser.id}</p>
+        <Segment style={{ overflow: "auto", maxHeight: 600 }}>
+          <input
+            style={{ display: "none" }}
+            type="file"
+            id="file"
+            name="file"
+            placeholder="Upload an image"
+            required
+            onChange={uploadFile}
+            ref={(fileInput) => (initialFileInput1 = fileInput)}
+          />
+          <input
+            style={{ display: "none" }}
+            type="file"
+            id="file"
+            name="file"
+            placeholder="Upload an image"
+            required
+            onChange={uploadFile2}
+            ref={(fileInput) => (initialFileInput2 = fileInput)}
+          />
+          <input
+            style={{ display: "none" }}
+            type="file"
+            id="file"
+            name="file"
+            placeholder="Upload an image"
+            required
+            onChange={uploadFile3}
+            ref={(fileInput) => (initialFileInput3 = fileInput)}
+          />
+          <EditPhotosContainer>
+            <UploadImage1 onClick={() => initialFileInput1.click()}>
+              {imageOne ? <img src={imageOne} alt="Default" /> : ""}
+            </UploadImage1>
+            <UploadImage2 onClick={() => initialFileInput2.click()}>
+              {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
+            </UploadImage2>
+            <UploadImage3 onClick={() => initialFileInput3.click()}>
+              {imageThree ? <img src={imageThree} alt="Third" /> : ""}
+            </UploadImage3>
+          </EditPhotosContainer>
 
-        <p className="name">
-          {currentUser.firstName + " " + currentUser.lastName}, <span>Age</span>
-        </p>
+          {/* <p className="name">
+            {currentUser.firstName + " " + currentUser.lastName},{" "}
+            <span>Age</span>
+          </p> */}
+
+          <h3>About</h3>
+          <Form>
+            <TextArea
+              className="about"
+              style={{ minHeight: 100, maxHeight: 100 }}
+            //   maxLength={}
+              placeholder="I like long walks on the beach..."
+            />
+          </Form>
+        </Segment>
       </ProfileCard>
     </div>
   );

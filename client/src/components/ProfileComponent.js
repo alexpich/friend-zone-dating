@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
 import styled from "styled-components";
+import { Button, Segment } from "semantic-ui-react";
+
 import ImageService from "../services/image.service";
 import { UserContext } from "../context/UserContext";
 
@@ -9,7 +10,7 @@ import { UserContext } from "../context/UserContext";
 
 const ProfileCard = styled.div`
   border: 1px solid black;
-  height: 50vh;
+  /* height: 50vh; */
   .name {
     text-transform: capitalize;
   }
@@ -53,16 +54,19 @@ const ProfileComponent = () => {
       <h1>ProfileComponent</h1>
       {/* <p>{JSON.stringify(currentUser)}</p> */}
       <ProfileCard>
-        <PhotosContainer>
-          {imageOne ? <img src={imageOne} alt="Default" /> : ""}
-          {imageTwo ? <img src={imageTwo} alt="Default" /> : ""}
-          {imageThree ? <img src={imageThree} alt="Default" /> : ""}
-        </PhotosContainer>
-        <p className="name">
-          {currentUser.firstName + " " + currentUser.lastName}, <span>Age</span>
-        </p>
+        <Segment style={{ overflow: "auto", maxHeight: 600 }}>
+          <PhotosContainer>
+            {imageOne ? <img src={imageOne} alt="Default" /> : ""}
+            {imageTwo ? <img src={imageTwo} alt="Default" /> : ""}
+            {imageThree ? <img src={imageThree} alt="Default" /> : ""}
+          </PhotosContainer>
+          <p className="name">
+            {currentUser.firstName + " " + currentUser.lastName},{" "}
+            <span>Age</span>
+          </p>
+        </Segment>
       </ProfileCard>
-      <Button>
+      <Button onClick={(e) => e.preventDefault()}>
         <Link to="/profile/edit">Edit Profile</Link>
       </Button>
     </div>

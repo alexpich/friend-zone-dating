@@ -8,6 +8,7 @@ import SignUpButton from "./styles/SignUpButton";
 import HomeBg from "../assets/home-bg.jpg";
 
 const HomeStyles = styled.div`
+  /* TODO: Optimize and compress bg image */
   background-image: url(${HomeBg});
   background-size: cover;
   background-repeat: no-repeat;
@@ -44,7 +45,7 @@ const HomeComponent = () => {
         <Grid.Column style={{ maxWidth: 1200 }}>
           <h2>Find Your Match</h2>
           <h3>Or Send Them To The FriendZone...</h3>
-          <SignUpButton >
+          <SignUpButton>
             <Link to="/signup">Sign Up</Link>
           </SignUpButton>
           {/* <Button color="red" size="large">
