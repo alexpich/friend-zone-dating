@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import AuthService from "../services/auth.service";
 
 const NotSignedInRoute = ({ component: Component, ...rest }) => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const isAuthenticated = currentUser;
-  // const isAuthenticated = AuthService.getCurrentUser();
 
   return (
     <Route
@@ -18,9 +16,6 @@ const NotSignedInRoute = ({ component: Component, ...rest }) => {
           />
         ) : (
           <Component {...props} />
-          // <Redirect
-          //   to={{ pathname: "/", state: { from: props.location } }}
-          // />
         )
       }
     />

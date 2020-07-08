@@ -15,6 +15,7 @@ import LoveZone from "./pages/lovezone";
 import Matches from "./pages/matches";
 import Messages from "./pages/messages";
 import Profile from "./pages/profile";
+import Edit from "./pages/edit";
 import Signin from "./pages/signin";
 import Signup from "./pages/signup";
 
@@ -39,6 +40,7 @@ function App() {
                 <ProtectedRoute exact path="/matches" component={Matches} />
                 <ProtectedRoute exact path="/messages" component={Messages} />
                 <ProtectedRoute exact path="/profile" component={Profile} />
+                <ProtectedRoute exact path="/profile/edit" component={Edit} />
                 <NotSignedInRoute exact path="/signin" component={Signin} />
                 <NotSignedInRoute exact path="/signup" component={Signup} />
                 <NotSignedInRoute path="/" component={Home} />

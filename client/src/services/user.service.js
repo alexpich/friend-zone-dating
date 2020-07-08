@@ -4,7 +4,6 @@ import authHeader from "./auth-header";
 
 //test
 const API_URL = "http://localhost:5000/api/auth/";
-const API_URL_TEST = "http://localhost:5000/api/test/";
 
 class UserService {
   // TODO: Fix these
