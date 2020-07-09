@@ -50,113 +50,11 @@ const UploadImage3 = styled.div`
   height: 150px;
 `;
 
-const uploadFile = async (e) => {
-  console.log("Uploading image...");
-  const files = e.target.files;
-  const data = new FormData();
-  data.append("file", files[0]);
-  data.append("upload_preset", "friendzone");
-
-  // Posts to Cloudinary
-  const res = await axios
-    .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-      onUploadProgress: (progressEvent) => {
-        //   TODO: Animate this
-        console.log(
-          "Upload progress:" +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            "%"
-        );
-      },
-    })
-    // TODO: Rewrite this to use async await later
-    .then((response) => {
-      const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-      const imageData = {
-        url: response.data.url,
-        order: 1,
-        userId: currentUserId,
-      };
-
-      //Post info to DB
-      ImageService.create(imageData);
-    })
-    .catch((e) => console.log(e));
-};
-
-const uploadFile2 = async (e) => {
-  console.log("Uploading image...");
-  const files = e.target.files;
-  const data = new FormData();
-  data.append("file", files[0]);
-  data.append("upload_preset", "friendzone");
-
-  // Posts to Cloudinary
-  const res = await axios
-    .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-      onUploadProgress: (progressEvent) => {
-        //   TODO: Animate this
-        console.log(
-          "Upload progress:" +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            "%"
-        );
-      },
-    })
-    // TODO: Rewrite this to use async await later
-    .then((response) => {
-      const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-      const imageData = {
-        url: response.data.url,
-        order: 2,
-        userId: currentUserId,
-      };
-
-      //Post info to DB
-      ImageService.create(imageData);
-    })
-    .catch((e) => console.log(e));
-};
-
-const uploadFile3 = async (e) => {
-  console.log("Uploading image...");
-  const files = e.target.files;
-  const data = new FormData();
-  data.append("file", files[0]);
-  data.append("upload_preset", "friendzone");
-
-  // Posts to Cloudinary
-  const res = await axios
-    .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-      onUploadProgress: (progressEvent) => {
-        //   TODO: Animate this
-        console.log(
-          "Upload progress:" +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            "%"
-        );
-      },
-    })
-    // TODO: Rewrite this to use async await later
-    .then((response) => {
-      const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-      const imageData = {
-        url: response.data.url,
-        order: 3,
-        userId: currentUserId,
-      };
-
-      //Post info to DB
-      ImageService.create(imageData);
-    })
-    .catch((e) => console.log(e));
-};
-
 const EditProfileComponent = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   //   Images
-  const [hasImage, setHasImage] = useState(false);
+  //   const [hasImage, setHasImage] = useState(false);
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
@@ -168,7 +66,6 @@ const EditProfileComponent = () => {
     if (currentUser) {
       ImageService.get(currentUser.id)
         .then((res) => {
-          setHasImage(true);
           setImageOne(res.data[0].url);
           setImageTwo(res.data[1].url);
           setImageThree(res.data[2].url);
@@ -178,6 +75,140 @@ const EditProfileComponent = () => {
         });
     }
   }, [currentUser, imageOne]);
+
+  const uploadFile = async (e) => {
+    console.log("Uploading image...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "friendzone");
+
+    // Posts to Cloudinary
+    const res = await axios
+      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
+        onUploadProgress: (progressEvent) => {
+          //   TODO: Animate this
+          console.log(
+            "Upload progress:" +
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+              "%"
+          );
+        },
+      })
+      // TODO: Rewrite this to use async await later
+      .then((response) => {
+        const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        const imageData = {
+          url: response.data.url,
+          order: 1,
+          userId: currentUserId,
+        };
+
+        //Post info to DB
+        ImageService.create(imageData);
+
+        // Get the image so that we can display it
+        ImageService.get(imageData.id)
+          .then((res) => {
+            setImageOne(imageData.url);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const uploadFile2 = async (e) => {
+    console.log("Uploading image...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "friendzone");
+
+    // Posts to Cloudinary
+    const res = await axios
+      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
+        onUploadProgress: (progressEvent) => {
+          //   TODO: Animate this
+          console.log(
+            "Upload progress:" +
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+              "%"
+          );
+        },
+      })
+      // TODO: Rewrite this to use async await later
+      .then((response) => {
+        const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        const imageData = {
+          url: response.data.url,
+          order: 2,
+          userId: currentUserId,
+        };
+
+        //Post info to DB
+        ImageService.create(imageData);
+
+        // Get the image so that we can display it
+        ImageService.get(imageData.id)
+          .then((res) => {
+            setImageTwo(imageData.url);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const uploadFile3 = async (e) => {
+    console.log("Uploading image...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "friendzone");
+
+    // Posts to Cloudinary
+    const res = await axios
+      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
+        onUploadProgress: (progressEvent) => {
+          //   TODO: Animate this
+          console.log(
+            "Upload progress:" +
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+              "%"
+          );
+        },
+      })
+      // TODO: Rewrite this to use async await later
+      .then((response) => {
+        const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        const imageData = {
+          url: response.data.url,
+          order: 3,
+          userId: currentUserId,
+        };
+
+        //Post info to DB
+        ImageService.create(imageData);
+
+        // Get the image so that we can display it
+        ImageService.get(imageData.id)
+          .then((res) => {
+            setImageThree(imageData.url);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const deletePhoto = async (e) => {
+    // const res = await axios.delete
+    e.preventDefault();
+  };
 
   let initialFileInput1 = null;
   let initialFileInput2 = null;
@@ -219,9 +250,21 @@ const EditProfileComponent = () => {
             ref={(fileInput) => (initialFileInput3 = fileInput)}
           />
           <EditPhotosContainer>
-            <UploadImage1 onClick={() => initialFileInput1.click()}>
-              {imageOne ? <img src={imageOne} alt="Default" /> : ""}
-            </UploadImage1>
+            {imageOne ? (
+              <UploadImage1>
+                <div>
+                  <img src={imageOne} alt="Default" />
+                  <button onClick={deletePhoto}>x</button>
+                </div>
+              </UploadImage1>
+            ) : (
+              <UploadImage1 onClick={() => initialFileInput1.click()}>
+                <div>
+                  <button>+</button>
+                </div>
+              </UploadImage1>
+            )}
+
             <UploadImage2 onClick={() => initialFileInput2.click()}>
               {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
             </UploadImage2>

@@ -39,8 +39,6 @@ exports.findAll = (req, res) => {
 
 // Retrieves all Images of Current User
 exports.findAllByUser = (req, res) => {
-  //   const imageId = req.query.id;
-  //   var condition = imageId ? { id: { [Op.like]: `%${imageId}%` } } : null;
   const id = req.params.id;
 
   Image.findAll({

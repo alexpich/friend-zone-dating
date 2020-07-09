@@ -29,10 +29,8 @@ exports.create = (req, res) => {
 
 // Retrieves all UserDetails of Current User
 exports.findAllByUser = (req, res) => {
-  //   const imageId = req.query.id;
-  //   var condition = imageId ? { id: { [Op.like]: `%${imageId}%` } } : null;
-
   const id = req.params.id;
+  
   UserDetails.findAll({
     where: {
       userId: id,
