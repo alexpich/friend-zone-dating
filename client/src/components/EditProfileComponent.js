@@ -54,7 +54,6 @@ const EditProfileComponent = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   //   Images
-  //   const [hasImage, setHasImage] = useState(false);
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
@@ -99,7 +98,7 @@ const EditProfileComponent = () => {
       .then((response) => {
         const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
-          url: response.data.url,
+          url: response.data.secure_url,
           order: 1,
           userId: currentUserId,
         };
@@ -142,7 +141,7 @@ const EditProfileComponent = () => {
       .then((response) => {
         const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
-          url: response.data.url,
+          url: response.data.secure_url,
           order: 2,
           userId: currentUserId,
         };
@@ -185,7 +184,7 @@ const EditProfileComponent = () => {
       .then((response) => {
         const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
-          url: response.data.url,
+          url: response.data.secure_url,
           order: 3,
           userId: currentUserId,
         };
@@ -265,18 +264,36 @@ const EditProfileComponent = () => {
               </UploadImage1>
             )}
 
-            <UploadImage2 onClick={() => initialFileInput2.click()}>
-              {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
-            </UploadImage2>
-            <UploadImage3 onClick={() => initialFileInput3.click()}>
-              {imageThree ? <img src={imageThree} alt="Third" /> : ""}
-            </UploadImage3>
-          </EditPhotosContainer>
+            {imageTwo ? (
+              <UploadImage2>
+                <div>
+                  <img src={imageTwo} alt="Second" />
+                  <button onClick={deletePhoto}>x</button>
+                </div>
+              </UploadImage2>
+            ) : (
+              <UploadImage2 onClick={() => initialFileInput2.click()}>
+                <div>
+                  <button>+</button>
+                </div>
+              </UploadImage2>
+            )}
 
-          {/* <p className="name">
-            {currentUser.firstName + " " + currentUser.lastName},{" "}
-            <span>Age</span>
-          </p> */}
+            {imageThree ? (
+              <UploadImage3>
+                <div>
+                  <img src={imageThree} alt="Third" />
+                  <button onClick={deletePhoto}>x</button>
+                </div>
+              </UploadImage3>
+            ) : (
+              <UploadImage3 onClick={() => initialFileInput3.click()}>
+                <div>
+                  <button>+</button>
+                </div>
+              </UploadImage3>
+            )}
+          </EditPhotosContainer>
 
           <h3>About</h3>
           <Form>
