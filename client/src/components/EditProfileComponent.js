@@ -6,7 +6,7 @@ import { Button, Container, Form, Segment, TextArea } from "semantic-ui-react";
 
 import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
-import UserService from "../services/user.service";
+import UserDetailsService from "../services/userDetails.service";
 
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 // TODO: 3) Refactor into multiple components
@@ -30,6 +30,19 @@ const EditPhotosContainer = styled.div`
     width: 120px;
     height: 150px;
   }
+  div {
+    position: relative;
+    .imagePlaceholder {
+      width: 120px;
+      height: 150px;
+    }
+  }
+  div > button {
+    position: absolute;
+    bottom: 6px;
+    right: 2px;
+    z-index: 10;
+  }
 `;
 
 const UploadImage1 = styled.div`
@@ -51,7 +64,25 @@ const UploadImage3 = styled.div`
 `;
 
 const EditProfileComponent = () => {
+  // Current user
   const { currentUser, setCurrentUser } = useContext(UserContext);
+
+  //   Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  //   Initial state
+  const initialUserDetails = {
+    about: "",
+    jobTitle: "",
+    school: "",
+    location: "",
+    gender: "",
+    preference: "",
+    userId: currentUser.id,
+  };
+
+  //   User Details
+  const [userDetails, setUserDetails] = useState(initialUserDetails);
 
   //   Images
   const [imageOne, setImageOne] = useState(null);
@@ -59,8 +90,9 @@ const EditProfileComponent = () => {
   const [imageThree, setImageThree] = useState(null);
 
   //    About
-  //   const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
+  const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
 
+  //   Retrieves images
   useEffect(() => {
     if (currentUser) {
       ImageService.get(currentUser.id)
@@ -75,6 +107,28 @@ const EditProfileComponent = () => {
     }
   }, [currentUser, imageOne]);
 
+  //   Retrieve User details
+  useEffect(() => {
+    UserDetailsService.get(currentUser.id)
+      .then((res) => {
+        setUserDetails(res.data[0]);
+        console.log(res.data[0]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
+  // Form data
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetails({
+      ...userDetails,
+      [name]: value,
+    });
+  };
+
+  // Uploading images
   const uploadFile = async (e) => {
     console.log("Uploading image...");
     const files = e.target.files;
@@ -206,6 +260,7 @@ const EditProfileComponent = () => {
 
   const deletePhoto = async (e) => {
     // const res = await axios.delete
+    console.log("Deleting photo...");
     e.preventDefault();
   };
 
@@ -215,7 +270,6 @@ const EditProfileComponent = () => {
 
   return (
     <div>
-      {/* <h1>EditProfileComponent</h1> */}
       <ProfileCard>
         <Segment style={{ overflow: "auto", maxHeight: 600 }}>
           <input
@@ -259,6 +313,7 @@ const EditProfileComponent = () => {
             ) : (
               <UploadImage1 onClick={() => initialFileInput1.click()}>
                 <div>
+                  <div className="imagePlaceholder"></div>
                   <button>+</button>
                 </div>
               </UploadImage1>
@@ -274,6 +329,7 @@ const EditProfileComponent = () => {
             ) : (
               <UploadImage2 onClick={() => initialFileInput2.click()}>
                 <div>
+                  <div className="imagePlaceholder"></div>
                   <button>+</button>
                 </div>
               </UploadImage2>
@@ -289,6 +345,7 @@ const EditProfileComponent = () => {
             ) : (
               <UploadImage3 onClick={() => initialFileInput3.click()}>
                 <div>
+                  <div className="imagePlaceholder"></div>
                   <button>+</button>
                 </div>
               </UploadImage3>
@@ -302,9 +359,16 @@ const EditProfileComponent = () => {
               className="about"
               style={{ minHeight: 100, maxHeight: 100 }}
               //   maxLength={}
-              placeholder="I like long walks on the beach..."
+              onChange={handleInputChange}
+              defaultValue={userDetails.about}
+              placeholder="I like long walks on the beach and gazing upon the stars..."
             />
-            <Form.Input label="Job Title" type="" placeholder="Add Job Title" />
+            <Form.Input
+              label="Job Title"
+              onChange={handleInputChange}
+              defaultValue={userDetails.jobTitle}
+              placeholder="Add Job Title"
+            />
 
             <Button color="red" fluid>
               Save
