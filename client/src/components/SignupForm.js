@@ -276,7 +276,7 @@ const SignupForm = () => {
             )}
             <Button
               color="red"
-              size="small"
+              fluid
               onClick={saveUser}
               disabled={
                 !user.email ||

@@ -22,6 +22,10 @@ db.sequelize = sequelize;
 db.image = require("../models/image.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
+db.userDetails = require("../models/userDetails.model.js")(
+  sequelize,
+  Sequelize
+);
 
 db.image.belongsTo(db.user);
 
@@ -36,6 +40,8 @@ db.user.belongsToMany(db.role, {
   foreignKey: "userId",
   otherKey: "roleId",
 });
+
+db.userDetails.belongsTo(db.user);
 
 db.ROLES = ["user", "admin"];
 

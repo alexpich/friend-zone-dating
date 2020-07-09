@@ -9,7 +9,7 @@ import { UserContext } from "../context/UserContext";
 // TODO: Change these photos from a grid pattern to a single picture that can be cycled through
 
 const ProfileCard = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black; */
   /* height: 50vh; */
   .name {
     text-transform: capitalize;
@@ -66,9 +66,9 @@ const ProfileComponent = () => {
           </p>
         </Segment>
       </ProfileCard>
-      <Button onClick={(e) => e.preventDefault()}>
-        <Link to="/profile/edit">Edit Profile</Link>
-      </Button>
+      <Link to="/profile/edit">
+        <Button>Edit Profile</Button>
+      </Link>
     </div>
   );
 };

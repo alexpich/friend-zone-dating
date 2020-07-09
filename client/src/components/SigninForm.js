@@ -100,7 +100,7 @@ const SigninForm = () => {
             />
             <Button
               color="red"
-              size="small"
+              fluid
               onClick={signinHandler}
               disabled={!user.email || !user.password}
             >

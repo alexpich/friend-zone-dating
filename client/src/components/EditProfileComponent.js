@@ -11,7 +11,7 @@ import UserService from "../services/user.service";
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 
 const ProfileCard = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black; */
   /* height: 600px; */
   .name {
     text-transform: capitalize;
@@ -240,7 +240,7 @@ const EditProfileComponent = () => {
             <TextArea
               className="about"
               style={{ minHeight: 100, maxHeight: 100 }}
-            //   maxLength={}
+              //   maxLength={}
               placeholder="I like long walks on the beach..."
             />
           </Form>

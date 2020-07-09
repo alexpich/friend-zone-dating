@@ -13,6 +13,8 @@ module.exports = (app) => {
   // Router level middleware
   var router = require("express").Router();
 
+  app.use("/api/users", router);
+
   //test routes
   // app.get("/api/test/all", users.allAccess);
   // app.get("/api/test/user", [authJwt.verifyToken], users.userBoard);
@@ -39,6 +41,4 @@ module.exports = (app) => {
 
   // Create a new User
   router.delete("/", users.deleteAll);
-
-  app.use("/api/users", router);
 };
