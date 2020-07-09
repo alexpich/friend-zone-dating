@@ -37,6 +37,9 @@ const SignupForm = () => {
     passwordError: false,
   };
 
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
   // User data
   const [user, setUser] = useState(initialUserState);
 
@@ -150,6 +153,7 @@ const SignupForm = () => {
       data.password
     );
 
+    setIsLoading(true);
     if (isValid) {
       AuthService.signup(
         data.email,
@@ -183,9 +187,12 @@ const SignupForm = () => {
           setErrorMessage(e.response.data.message);
           setEmailError(initialErrorState.email);
           setFirstNameError(initialErrorState.firstName);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     } else {
-      setUser(initialUserState);
+      setIsLoading(false);
     }
   };
 
@@ -285,7 +292,7 @@ const SignupForm = () => {
                 !user.password
               }
             >
-              Sign Up
+              {isLoading ? "Loading..." : "Sign Up"}
             </Button>
           </Segment>
         </Form>
