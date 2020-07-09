@@ -10,8 +10,9 @@ const SignUpButton = styled.button`
   font-size: 1.6rem;
   text-transform: uppercase;
   border: 0;
-  border-radius: .28571429rem;
+  border-radius: 0.28571429rem;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 `;
 
 export default SignUpButton;

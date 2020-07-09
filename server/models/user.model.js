@@ -1,4 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
+  // TODO: Age
   const User = sequelize.define("users", {
     email: {
       type: Sequelize.STRING,
