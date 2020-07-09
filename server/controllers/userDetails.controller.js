@@ -31,20 +31,22 @@ exports.create = (req, res) => {
 exports.findAllByUser = (req, res) => {
   //   const imageId = req.query.id;
   //   var condition = imageId ? { id: { [Op.like]: `%${imageId}%` } } : null;
-  //   const id = req.params.id;
-  //   Image.findAll({
-  //     where: {
-  //       userId: id,
-  //     },
-  //   })
-  //     .then((data) => {
-  //       res.send(data);
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).send({
-  //         message: err.message || "Some error occurred while retrieving Images.",
-  //       });
-  //     });
+
+  const id = req.params.id;
+  UserDetails.findAll({
+    where: {
+      userId: id,
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving user details.",
+      });
+    });
 };
 
 // Update UserDetails by the id in the request

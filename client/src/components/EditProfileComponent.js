@@ -2,14 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import { Container, Form, Segment, TextArea } from "semantic-ui-react";
+import { Button, Container, Form, Segment, TextArea } from "semantic-ui-react";
 
 import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
 import UserService from "../services/user.service";
 
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
-
+// TODO: 3) Refactor into multiple components
 const ProfileCard = styled.div`
   /* border: 1px solid black; */
   /* height: 600px; */
@@ -238,11 +238,17 @@ const EditProfileComponent = () => {
           <h3>About</h3>
           <Form>
             <TextArea
+              label="About"
               className="about"
               style={{ minHeight: 100, maxHeight: 100 }}
               //   maxLength={}
               placeholder="I like long walks on the beach..."
             />
+            <Form.Input label="Job Title" type="" placeholder="Add Job Title" />
+
+            <Button color="red" fluid>
+              Save
+            </Button>
           </Form>
         </Segment>
       </ProfileCard>
