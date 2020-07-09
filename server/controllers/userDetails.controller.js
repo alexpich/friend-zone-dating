@@ -1,9 +1,31 @@
 const db = require("../models");
-const userDetails = db.userDetails;
+const UserDetails = db.userDetails;
 const Op = db.Sequelize.Op;
 
 // Create and post the details in the DB
-exports.create = (req, res) => {};
+exports.create = (req, res) => {
+  const user = {
+    about: req.body.about,
+    jobTitle: req.body.jobTitle,
+    school: req.body.school,
+    location: req.body.location,
+    gender: req.body.gender,
+    preference: req.body.preference,
+    userId: req.body.userId,
+  };
+
+  UserDetails.create(user)
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "An error occurred while creating the user details.",
+      });
+    });
+};
 
 // Retrieves all UserDetails of Current User
 exports.findAllByUser = (req, res) => {

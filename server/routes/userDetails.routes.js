@@ -9,11 +9,11 @@ module.exports = (app) => {
     next();
   });
 
-    // Router level middleware
-    var router = require("express").Router();
+  // Router level middleware
+  var router = require("express").Router();
 
-  //   // Create a new Image
-  //   router.post("/", images.create);
+  // Create a new Image
+  router.post("/", userDetails.create);
 
   //   // Retrieve all Images by userId
   //   router.get("/:id", images.findAllByUser);
@@ -27,5 +27,5 @@ module.exports = (app) => {
   //   // Delete an Image with id
   //   router.delete("/:id", images.delete);
 
-  app.use("/api/profile/edit", router);
+  app.use("/api/profile/edit/about", router);
 };

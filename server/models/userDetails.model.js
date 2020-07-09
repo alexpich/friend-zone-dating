@@ -15,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
     gender: {
       type: Sequelize.STRING,
     },
-    sexualOrientation: {
+    preference: {
       type: Sequelize.STRING,
     },
   });
