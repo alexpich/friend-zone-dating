@@ -2,17 +2,28 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import { Button, Container, Form, Segment, TextArea } from "semantic-ui-react";
+import {
+  Button,
+  Container,
+  Form,
+  Input,
+  Segment,
+  TextArea,
+} from "semantic-ui-react";
+import Select from "react-select";
 
 import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
 import UserDetailsService from "../services/userDetails.service";
+
+import { useForm } from "./useForm";
 
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 // TODO: 3) Refactor into multiple components
 const ProfileCard = styled.div`
   /* border: 1px solid black; */
   /* height: 600px; */
+  background-color: yellow;
   .name {
     text-transform: capitalize;
   }
@@ -78,11 +89,12 @@ const EditProfileComponent = () => {
     location: "",
     gender: "",
     preference: "",
-    userId: currentUser.id,
+    userId: 1,
   };
 
   //   User Details
   const [userDetails, setUserDetails] = useState(initialUserDetails);
+  const [values, handleChange] = useForm(initialUserDetails);
 
   //   Images
   const [imageOne, setImageOne] = useState(null);
@@ -90,43 +102,25 @@ const EditProfileComponent = () => {
   const [imageThree, setImageThree] = useState(null);
 
   //    About
-  const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
+  //   const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
+  //   const [preference, setPreference] = useState(initialUserDetails.preference);
 
-  //   Retrieves images
-  useEffect(() => {
-    if (currentUser) {
-      ImageService.get(currentUser.id)
-        .then((res) => {
-          setImageOne(res.data[0].url);
-          setImageTwo(res.data[1].url);
-          setImageThree(res.data[2].url);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-  }, [currentUser, imageOne]);
-
-  //   Retrieve User details
-  useEffect(() => {
-    UserDetailsService.get(currentUser.id)
-      .then((res) => {
-        setUserDetails(res.data[0]);
-        console.log(res.data[0]);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+  //   const options = [
+  //     { value: "men", label: "Men" },
+  //     { value: "women", label: "Women" },
+  //     { value: "any", label: "Any" },
+  //   ];
 
   // Form data
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserDetails({
-      ...userDetails,
-      [name]: value,
-    });
-  };
+  //   const handleInputChange = (e) => {
+  //     const { name, value } = e.target;
+
+  //     setUserDetails({
+  //       ...userDetails,
+  //       [name]: value,
+  //     });
+  //     console.log(userDetails);
+  //   };
 
   // Uploading images
   const uploadFile = async (e) => {
@@ -150,11 +144,11 @@ const EditProfileComponent = () => {
       })
       // TODO: Rewrite this to use async await later
       .then((response) => {
-        const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
           url: response.data.secure_url,
           order: 1,
-          userId: currentUserId,
+          userId: currentUser.id,
         };
 
         //Post info to DB
@@ -193,11 +187,11 @@ const EditProfileComponent = () => {
       })
       // TODO: Rewrite this to use async await later
       .then((response) => {
-        const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
           url: response.data.secure_url,
           order: 2,
-          userId: currentUserId,
+          userId: currentUser.id,
         };
 
         //Post info to DB
@@ -236,11 +230,11 @@ const EditProfileComponent = () => {
       })
       // TODO: Rewrite this to use async await later
       .then((response) => {
-        const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
           url: response.data.secure_url,
           order: 3,
-          userId: currentUserId,
+          userId: currentUser.id,
         };
 
         //Post info to DB
@@ -263,6 +257,51 @@ const EditProfileComponent = () => {
     console.log("Deleting photo...");
     e.preventDefault();
   };
+
+  const updateDetails = (e) => {
+    console.log("Saving...");
+    UserDetailsService.update(currentUser.id, values)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    // console.log(userDetails);
+  };
+
+  //   Retrieves images
+  useEffect(() => {
+    if (currentUser) {
+      ImageService.get(currentUser.id)
+        .then((res) => {
+          setImageOne(res.data[0].url);
+          setImageTwo(res.data[1].url);
+          setImageThree(res.data[2].url);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [currentUser, imageOne]);
+
+  // Retrieve User details
+  useEffect(() => {
+    UserDetailsService.get(currentUser.id)
+      .then((res) => {
+        let response = res.data[0];
+        console.log(response);
+        setUserDetails(response);
+        //   console.log(userDetails);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
+  //   useEffect(() => {
+  //     console.log("render");
+  //   }, [values]);
 
   let initialFileInput1 = null;
   let initialFileInput2 = null;
@@ -357,20 +396,65 @@ const EditProfileComponent = () => {
             <TextArea
               label="About"
               className="about"
+              name="about"
+              placeholder="I like long walks on the beach and gazing upon the stars..."
               style={{ minHeight: 100, maxHeight: 100 }}
               //   maxLength={}
-              onChange={handleInputChange}
+              value={values.about}
               defaultValue={userDetails.about}
-              placeholder="I like long walks on the beach and gazing upon the stars..."
-            />
-            <Form.Input
-              label="Job Title"
-              onChange={handleInputChange}
-              defaultValue={userDetails.jobTitle}
-              placeholder="Add Job Title"
+              onChange={handleChange}
             />
 
-            <Button color="red" fluid>
+            <Form.Input
+              label="Job Title"
+              name="jobTitle"
+              placeholder="Add Job Title"
+              value={values.jobTitle}
+              defaultValue={userDetails.jobTitle}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Search school */}
+            <Form.Input
+              label="School"
+              defaultValue={userDetails.school}
+              value={values.school}
+              name="school"
+              placeholder="Add School"
+              onChange={handleChange}
+            />
+
+            {/* TODO: Search location */}
+            <Form.Input
+              label="Location"
+              name="location"
+              placeholder="Add Location"
+              defaultValue={userDetails.location}
+              value={values.location}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Use a Select */}
+            <Form.Input
+              label="Gender"
+              name="gender"
+              placeholder="Gender"
+              defaultValue={userDetails.gender}
+              value={values.gender}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Use a Select */}
+            <Form.Input
+              label="Preference"
+              name="preference"
+              placeholder="Preference"
+              defaultValue={userDetails.preference}
+              onChange={handleChange}
+              value={values.preference}
+            />
+
+            <Button onClick={updateDetails} color="red" fluid>
               Save
             </Button>
           </Form>

@@ -11,6 +11,11 @@ class UserDetailsService {
   create(data) {
     return axios.post(API_URL, data, { headers: authHeader() });
   }
+
+  update(id, data) {
+    // return axios.put(API_URL + id, data, { headers: authHeader() });
+    return axios.put(API_URL + id, data, { headers: authHeader() });
+  }
 }
 
 export default new UserDetailsService();
