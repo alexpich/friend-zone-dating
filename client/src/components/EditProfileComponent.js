@@ -16,8 +16,6 @@ import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
 import UserDetailsService from "../services/userDetails.service";
 
-import { useForm } from "./useForm";
-
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 // TODO: 3) Refactor into multiple components
 const ProfileCard = styled.div`
@@ -94,7 +92,8 @@ const EditProfileComponent = () => {
 
   //   User Details
   const [userDetails, setUserDetails] = useState(initialUserDetails);
-  const [values, handleChange] = useForm(initialUserDetails);
+
+  //   const [values, handleChange] = useForm(initialUserDetails);
 
   //   Images
   const [imageOne, setImageOne] = useState(null);
@@ -260,14 +259,13 @@ const EditProfileComponent = () => {
 
   const updateDetails = (e) => {
     console.log("Saving...");
-    UserDetailsService.update(currentUser.id, values)
+    UserDetailsService.update(currentUser.id, userDetails)
       .then((res) => {
         console.log(res);
       })
       .catch((e) => {
         console.log(e);
       });
-    // console.log(userDetails);
   };
 
   //   Retrieves images
@@ -275,9 +273,15 @@ const EditProfileComponent = () => {
     if (currentUser) {
       ImageService.get(currentUser.id)
         .then((res) => {
-          setImageOne(res.data[0].url);
-          setImageTwo(res.data[1].url);
-          setImageThree(res.data[2].url);
+          if (res.data[0] !== null) {
+            setImageOne(res.data[0].url);
+          }
+          if (res.data[1] !== null) {
+            setImageTwo(res.data[1].url);
+          }
+          if (res.data[2] !== null) {
+            setImageThree(res.data[2].url);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -292,16 +296,20 @@ const EditProfileComponent = () => {
         let response = res.data[0];
         console.log(response);
         setUserDetails(response);
-        //   console.log(userDetails);
+
+        console.log(userDetails);
       })
       .catch((e) => {
         console.log(e);
       });
   }, []);
 
-  //   useEffect(() => {
-  //     console.log("render");
-  //   }, [values]);
+  const handleChange = (e) => {
+    setUserDetails({
+      ...userDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   let initialFileInput1 = null;
   let initialFileInput2 = null;
@@ -400,7 +408,6 @@ const EditProfileComponent = () => {
               placeholder="I like long walks on the beach and gazing upon the stars..."
               style={{ minHeight: 100, maxHeight: 100 }}
               //   maxLength={}
-              value={values.about}
               defaultValue={userDetails.about}
               onChange={handleChange}
             />
@@ -409,7 +416,6 @@ const EditProfileComponent = () => {
               label="Job Title"
               name="jobTitle"
               placeholder="Add Job Title"
-              value={values.jobTitle}
               defaultValue={userDetails.jobTitle}
               onChange={handleChange}
             />
@@ -417,10 +423,9 @@ const EditProfileComponent = () => {
             {/* TODO: Search school */}
             <Form.Input
               label="School"
-              defaultValue={userDetails.school}
-              value={values.school}
               name="school"
               placeholder="Add School"
+              defaultValue={userDetails.school}
               onChange={handleChange}
             />
 
@@ -430,7 +435,6 @@ const EditProfileComponent = () => {
               name="location"
               placeholder="Add Location"
               defaultValue={userDetails.location}
-              value={values.location}
               onChange={handleChange}
             />
 
@@ -440,7 +444,6 @@ const EditProfileComponent = () => {
               name="gender"
               placeholder="Gender"
               defaultValue={userDetails.gender}
-              value={values.gender}
               onChange={handleChange}
             />
 
@@ -451,7 +454,6 @@ const EditProfileComponent = () => {
               placeholder="Preference"
               defaultValue={userDetails.preference}
               onChange={handleChange}
-              value={values.preference}
             />
 
             <Button onClick={updateDetails} color="red" fluid>
