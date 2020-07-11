@@ -21,8 +21,8 @@ module.exports = (app) => {
   //   // Retrieve a single Image with id
   //   router.get("/:id", images.findOne);
 
-  //   // Update a Image with id
-  //   router.put("/:id", images.update);
+  // Update a Image with id
+  router.put("/:id", userDetails.update);
 
   //   // Delete an Image with id
   //   router.delete("/:id", images.delete);
