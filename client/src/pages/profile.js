@@ -10,7 +10,7 @@ const Profile = () => (
       <Grid.Column width={4}>
         <SidebarNav />
       </Grid.Column>
-      <Grid.Column>
+      <Grid.Column width={10}>
         <ProfileComponent />
       </Grid.Column>
     </Grid>

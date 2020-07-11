@@ -44,7 +44,7 @@ const ProfileComponent = () => {
           setImageThree(res.data[2].url);
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
         });
     }
   }, [currentUser, imageOne]);

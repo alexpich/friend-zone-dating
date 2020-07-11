@@ -2,17 +2,26 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import { Button, Container, Form, Segment, TextArea } from "semantic-ui-react";
+import {
+  Button,
+  Container,
+  Form,
+  Input,
+  Segment,
+  TextArea,
+} from "semantic-ui-react";
+import Select from "react-select";
 
 import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
-import UserService from "../services/user.service";
+import UserDetailsService from "../services/userDetails.service";
 
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 // TODO: 3) Refactor into multiple components
 const ProfileCard = styled.div`
   /* border: 1px solid black; */
   /* height: 600px; */
+  background-color: yellow;
   .name {
     text-transform: capitalize;
   }
@@ -29,6 +38,19 @@ const EditPhotosContainer = styled.div`
     object-fit: cover;
     width: 120px;
     height: 150px;
+  }
+  div {
+    position: relative;
+    .imagePlaceholder {
+      width: 120px;
+      height: 150px;
+    }
+  }
+  div > button {
+    position: absolute;
+    bottom: 6px;
+    right: 2px;
+    z-index: 10;
   }
 `;
 
@@ -50,128 +72,216 @@ const UploadImage3 = styled.div`
   height: 150px;
 `;
 
-const uploadFile = async (e) => {
-  console.log("Uploading image...");
-  const files = e.target.files;
-  const data = new FormData();
-  data.append("file", files[0]);
-  data.append("upload_preset", "friendzone");
-
-  // Posts to Cloudinary
-  const res = await axios
-    .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-      onUploadProgress: (progressEvent) => {
-        //   TODO: Animate this
-        console.log(
-          "Upload progress:" +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            "%"
-        );
-      },
-    })
-    // TODO: Rewrite this to use async await later
-    .then((response) => {
-      const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-      const imageData = {
-        url: response.data.url,
-        order: 1,
-        userId: currentUserId,
-      };
-
-      //Post info to DB
-      ImageService.create(imageData);
-    })
-    .catch((e) => console.log(e));
-};
-
-const uploadFile2 = async (e) => {
-  console.log("Uploading image...");
-  const files = e.target.files;
-  const data = new FormData();
-  data.append("file", files[0]);
-  data.append("upload_preset", "friendzone");
-
-  // Posts to Cloudinary
-  const res = await axios
-    .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-      onUploadProgress: (progressEvent) => {
-        //   TODO: Animate this
-        console.log(
-          "Upload progress:" +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            "%"
-        );
-      },
-    })
-    // TODO: Rewrite this to use async await later
-    .then((response) => {
-      const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-      const imageData = {
-        url: response.data.url,
-        order: 2,
-        userId: currentUserId,
-      };
-
-      //Post info to DB
-      ImageService.create(imageData);
-    })
-    .catch((e) => console.log(e));
-};
-
-const uploadFile3 = async (e) => {
-  console.log("Uploading image...");
-  const files = e.target.files;
-  const data = new FormData();
-  data.append("file", files[0]);
-  data.append("upload_preset", "friendzone");
-
-  // Posts to Cloudinary
-  const res = await axios
-    .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-      onUploadProgress: (progressEvent) => {
-        //   TODO: Animate this
-        console.log(
-          "Upload progress:" +
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-            "%"
-        );
-      },
-    })
-    // TODO: Rewrite this to use async await later
-    .then((response) => {
-      const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-      const imageData = {
-        url: response.data.url,
-        order: 3,
-        userId: currentUserId,
-      };
-
-      //Post info to DB
-      ImageService.create(imageData);
-    })
-    .catch((e) => console.log(e));
-};
-
 const EditProfileComponent = () => {
+  // Current user
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
+  //   Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  //   Initial state
+  const initialUserDetails = {
+    about: "",
+    jobTitle: "",
+    school: "",
+    location: "",
+    gender: "",
+    preference: "",
+    userId: 1,
+  };
+
+  //   User Details
+  const [userDetails, setUserDetails] = useState(initialUserDetails);
+
+  //   const [values, handleChange] = useForm(initialUserDetails);
+
   //   Images
-  const [hasImage, setHasImage] = useState(false);
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
 
   //    About
   //   const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
+  //   const [preference, setPreference] = useState(initialUserDetails.preference);
 
+  //   const options = [
+  //     { value: "men", label: "Men" },
+  //     { value: "women", label: "Women" },
+  //     { value: "any", label: "Any" },
+  //   ];
+
+  // Form data
+  //   const handleInputChange = (e) => {
+  //     const { name, value } = e.target;
+
+  //     setUserDetails({
+  //       ...userDetails,
+  //       [name]: value,
+  //     });
+  //     console.log(userDetails);
+  //   };
+
+  // Uploading images
+  const uploadFile = async (e) => {
+    console.log("Uploading image...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "friendzone");
+
+    // Posts to Cloudinary
+    const res = await axios
+      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
+        onUploadProgress: (progressEvent) => {
+          //   TODO: Animate this
+          console.log(
+            "Upload progress:" +
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+              "%"
+          );
+        },
+      })
+      // TODO: Rewrite this to use async await later
+      .then((response) => {
+        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        const imageData = {
+          url: response.data.secure_url,
+          order: 1,
+          userId: currentUser.id,
+        };
+
+        //Post info to DB
+        ImageService.create(imageData);
+
+        // Get the image so that we can display it
+        ImageService.get(imageData.id)
+          .then((res) => {
+            setImageOne(imageData.url);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const uploadFile2 = async (e) => {
+    console.log("Uploading image...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "friendzone");
+
+    // Posts to Cloudinary
+    const res = await axios
+      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
+        onUploadProgress: (progressEvent) => {
+          //   TODO: Animate this
+          console.log(
+            "Upload progress:" +
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+              "%"
+          );
+        },
+      })
+      // TODO: Rewrite this to use async await later
+      .then((response) => {
+        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        const imageData = {
+          url: response.data.secure_url,
+          order: 2,
+          userId: currentUser.id,
+        };
+
+        //Post info to DB
+        ImageService.create(imageData);
+
+        // Get the image so that we can display it
+        ImageService.get(imageData.id)
+          .then((res) => {
+            setImageTwo(imageData.url);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const uploadFile3 = async (e) => {
+    console.log("Uploading image...");
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "friendzone");
+
+    // Posts to Cloudinary
+    const res = await axios
+      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
+        onUploadProgress: (progressEvent) => {
+          //   TODO: Animate this
+          console.log(
+            "Upload progress:" +
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+              "%"
+          );
+        },
+      })
+      // TODO: Rewrite this to use async await later
+      .then((response) => {
+        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
+        const imageData = {
+          url: response.data.secure_url,
+          order: 3,
+          userId: currentUser.id,
+        };
+
+        //Post info to DB
+        ImageService.create(imageData);
+
+        // Get the image so that we can display it
+        ImageService.get(imageData.id)
+          .then((res) => {
+            setImageThree(imageData.url);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const deletePhoto = async (e) => {
+    // const res = await axios.delete
+    console.log("Deleting photo...");
+    e.preventDefault();
+  };
+
+  const updateDetails = (e) => {
+    console.log("Saving...");
+    UserDetailsService.update(currentUser.id, userDetails)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  //   Retrieves images
   useEffect(() => {
     if (currentUser) {
       ImageService.get(currentUser.id)
         .then((res) => {
-          setHasImage(true);
-          setImageOne(res.data[0].url);
-          setImageTwo(res.data[1].url);
-          setImageThree(res.data[2].url);
+          if (res.data[0] !== null) {
+            setImageOne(res.data[0].url);
+          }
+          if (res.data[1] !== null) {
+            setImageTwo(res.data[1].url);
+          }
+          if (res.data[2] !== null) {
+            setImageThree(res.data[2].url);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -179,13 +289,34 @@ const EditProfileComponent = () => {
     }
   }, [currentUser, imageOne]);
 
+  // Retrieve User details
+  useEffect(() => {
+    UserDetailsService.get(currentUser.id)
+      .then((res) => {
+        let response = res.data[0];
+        console.log(response);
+        setUserDetails(response);
+
+        console.log(userDetails);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
+  const handleChange = (e) => {
+    setUserDetails({
+      ...userDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   let initialFileInput1 = null;
   let initialFileInput2 = null;
   let initialFileInput3 = null;
 
   return (
     <div>
-      {/* <h1>EditProfileComponent</h1> */}
       <ProfileCard>
         <Segment style={{ overflow: "auto", maxHeight: 600 }}>
           <input
@@ -219,34 +350,113 @@ const EditProfileComponent = () => {
             ref={(fileInput) => (initialFileInput3 = fileInput)}
           />
           <EditPhotosContainer>
-            <UploadImage1 onClick={() => initialFileInput1.click()}>
-              {imageOne ? <img src={imageOne} alt="Default" /> : ""}
-            </UploadImage1>
-            <UploadImage2 onClick={() => initialFileInput2.click()}>
-              {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
-            </UploadImage2>
-            <UploadImage3 onClick={() => initialFileInput3.click()}>
-              {imageThree ? <img src={imageThree} alt="Third" /> : ""}
-            </UploadImage3>
-          </EditPhotosContainer>
+            {imageOne ? (
+              <UploadImage1>
+                <div>
+                  <img src={imageOne} alt="Default" />
+                  <button onClick={deletePhoto}>x</button>
+                </div>
+              </UploadImage1>
+            ) : (
+              <UploadImage1 onClick={() => initialFileInput1.click()}>
+                <div>
+                  <div className="imagePlaceholder"></div>
+                  <button>+</button>
+                </div>
+              </UploadImage1>
+            )}
 
-          {/* <p className="name">
-            {currentUser.firstName + " " + currentUser.lastName},{" "}
-            <span>Age</span>
-          </p> */}
+            {imageTwo ? (
+              <UploadImage2>
+                <div>
+                  <img src={imageTwo} alt="Second" />
+                  <button onClick={deletePhoto}>x</button>
+                </div>
+              </UploadImage2>
+            ) : (
+              <UploadImage2 onClick={() => initialFileInput2.click()}>
+                <div>
+                  <div className="imagePlaceholder"></div>
+                  <button>+</button>
+                </div>
+              </UploadImage2>
+            )}
+
+            {imageThree ? (
+              <UploadImage3>
+                <div>
+                  <img src={imageThree} alt="Third" />
+                  <button onClick={deletePhoto}>x</button>
+                </div>
+              </UploadImage3>
+            ) : (
+              <UploadImage3 onClick={() => initialFileInput3.click()}>
+                <div>
+                  <div className="imagePlaceholder"></div>
+                  <button>+</button>
+                </div>
+              </UploadImage3>
+            )}
+          </EditPhotosContainer>
 
           <h3>About</h3>
           <Form>
             <TextArea
               label="About"
               className="about"
+              name="about"
+              placeholder="I like long walks on the beach and gazing upon the stars..."
               style={{ minHeight: 100, maxHeight: 100 }}
               //   maxLength={}
-              placeholder="I like long walks on the beach..."
+              defaultValue={userDetails.about}
+              onChange={handleChange}
             />
-            <Form.Input label="Job Title" type="" placeholder="Add Job Title" />
 
-            <Button color="red" fluid>
+            <Form.Input
+              label="Job Title"
+              name="jobTitle"
+              placeholder="Add Job Title"
+              defaultValue={userDetails.jobTitle}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Search school */}
+            <Form.Input
+              label="School"
+              name="school"
+              placeholder="Add School"
+              defaultValue={userDetails.school}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Search location */}
+            <Form.Input
+              label="Location"
+              name="location"
+              placeholder="Add Location"
+              defaultValue={userDetails.location}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Use a Select */}
+            <Form.Input
+              label="Gender"
+              name="gender"
+              placeholder="Gender"
+              defaultValue={userDetails.gender}
+              onChange={handleChange}
+            />
+
+            {/* TODO: Use a Select */}
+            <Form.Input
+              label="Preference"
+              name="preference"
+              placeholder="Preference"
+              defaultValue={userDetails.preference}
+              onChange={handleChange}
+            />
+
+            <Button onClick={updateDetails} color="red" fluid>
               Save
             </Button>
           </Form>

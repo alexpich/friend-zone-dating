@@ -10,7 +10,7 @@ const Edit = () => (
       <Grid.Column width={4}>
         <SidebarNav />
       </Grid.Column>
-      <Grid.Column>
+      <Grid.Column width={10}>
         <EditProfileComponent />
       </Grid.Column>
     </Grid>

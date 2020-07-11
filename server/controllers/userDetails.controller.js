@@ -1,4 +1,5 @@
 const db = require("../models");
+// const { userDetails } = require("../models");
 const UserDetails = db.userDetails;
 const Op = db.Sequelize.Op;
 
@@ -29,10 +30,8 @@ exports.create = (req, res) => {
 
 // Retrieves all UserDetails of Current User
 exports.findAllByUser = (req, res) => {
-  //   const imageId = req.query.id;
-  //   var condition = imageId ? { id: { [Op.like]: `%${imageId}%` } } : null;
-
   const id = req.params.id;
+
   UserDetails.findAll({
     where: {
       userId: id,
@@ -51,24 +50,26 @@ exports.findAllByUser = (req, res) => {
 
 // Update UserDetails by the id in the request
 exports.update = (req, res) => {
-  //   const id = req.params.id;
-  //   Image.update(req.body, {
-  //     where: { id: id },
-  //   })
-  //     .then((num) => {
-  //       if (num == 1) {
-  //         res.send({
-  //           message: "Image was updated successfully.",
-  //         });
-  //       } else {
-  //         res.send({
-  //           message: `Cannot update Image with id=${id}. Maybe Image was not found or req.body is empty!`,
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).send({
-  //         message: "Error updating Image with id=" + id,
-  //       });
-  //     });
+  const id = req.params.id;
+
+  UserDetails.update(req.body, {
+    where: { id: id },
+  })
+    .then((num) => {
+      console.log(num);
+      if (num == 1) {
+        res.send({
+          message: "Details were updated successfully.",
+        });
+      } else {
+        res.send({
+          message: `Cannot update User details with user id=${id}. Maybe User details were not found or req.body is empty!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error updating User details with user id=" + id,
+      });
+    });
 };
