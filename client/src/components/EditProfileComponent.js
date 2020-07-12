@@ -295,11 +295,9 @@ const EditProfileComponent = () => {
 
   const handleChange = (e, result) => {
     const { name, value } = result || e.target;
-    // const { name, value } = e.target;
     setUserDetails({
       ...userDetails,
       [name]: value,
-      gender: result.option,
     });
     console.log(result);
   };
