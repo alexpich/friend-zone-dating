@@ -4,11 +4,11 @@ import axios from "axios";
 
 import {
   Button,
-  Container,
   Form,
-  Input,
   Segment,
   TextArea,
+  Dropdown,
+  Label,
 } from "semantic-ui-react";
 import Select from "react-select";
 
@@ -93,33 +93,58 @@ const EditProfileComponent = () => {
   //   User Details
   const [userDetails, setUserDetails] = useState(initialUserDetails);
 
-  //   const [values, handleChange] = useForm(initialUserDetails);
-
   //   Images
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
 
+  //   Retrieves images after render
+  useEffect(() => {
+    if (currentUser) {
+      ImageService.get(currentUser.id)
+        .then((res) => {
+          if (res.data[0] !== null) {
+            setImageOne(res.data[0].url);
+          }
+          if (res.data[1] !== null) {
+            setImageTwo(res.data[1].url);
+          }
+          if (res.data[2] !== null) {
+            setImageThree(res.data[2].url);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }, [currentUser, imageOne]);
+
+  // Retrieve User details after render
+  useEffect(() => {
+    UserDetailsService.get(currentUser.id)
+      .then((res) => {
+        const response = res.data[0];
+        setUserDetails(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
   //    About
   //   const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
-  //   const [preference, setPreference] = useState(initialUserDetails.preference);
 
-  //   const options = [
-  //     { value: "men", label: "Men" },
-  //     { value: "women", label: "Women" },
-  //     { value: "any", label: "Any" },
-  //   ];
+  const genderOptions = [
+    { value: "Man", label: "Man" },
+    { value: "Woman", label: "Woman" },
+    { value: "Other", label: "Other" },
+  ];
 
-  // Form data
-  //   const handleInputChange = (e) => {
-  //     const { name, value } = e.target;
-
-  //     setUserDetails({
-  //       ...userDetails,
-  //       [name]: value,
-  //     });
-  //     console.log(userDetails);
-  //   };
+  const preferenceOptions = [
+    { value: "Men", label: "Men" },
+    { value: "Women", label: "Women" },
+    { value: "Any", label: "Any" },
+  ];
 
   // Uploading images
   const uploadFile = async (e) => {
@@ -268,47 +293,23 @@ const EditProfileComponent = () => {
       });
   };
 
-  //   Retrieves images
-  useEffect(() => {
-    if (currentUser) {
-      ImageService.get(currentUser.id)
-        .then((res) => {
-          if (res.data[0] !== null) {
-            setImageOne(res.data[0].url);
-          }
-          if (res.data[1] !== null) {
-            setImageTwo(res.data[1].url);
-          }
-          if (res.data[2] !== null) {
-            setImageThree(res.data[2].url);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-  }, [currentUser, imageOne]);
-
-  // Retrieve User details
-  useEffect(() => {
-    UserDetailsService.get(currentUser.id)
-      .then((res) => {
-        let response = res.data[0];
-        console.log(response);
-        setUserDetails(response);
-
-        console.log(userDetails);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
-
-  const handleChange = (e) => {
+  const handleChange = (e, result) => {
+    const { name, value } = result || e.target;
+    // const { name, value } = e.target;
     setUserDetails({
       ...userDetails,
-      [e.target.name]: e.target.value,
+      [name]: value,
+      gender: result.option,
     });
+    console.log(result);
+  };
+
+  const handleSelectChange = (value, action) => {
+    setUserDetails({
+      ...userDetails,
+      [action.name]: value.value,
+    });
+    console.log(userDetails);
   };
 
   let initialFileInput1 = null;
@@ -438,24 +439,71 @@ const EditProfileComponent = () => {
               onChange={handleChange}
             />
 
-            {/* TODO: Use a Select */}
-            <Form.Input
+            {/* <Form.Input
               label="Gender"
               name="gender"
               placeholder="Gender"
               defaultValue={userDetails.gender}
               onChange={handleChange}
+            /> */}
+
+            {/* <Dropdown
+              label="gender"
+              name="gender"
+              placeholder={userDetails.gender}
+              options={options}
+              defaultValue={userDetails.gender}
+              selection
+              onChange={handleChange}
+            /> */}
+
+            {/* <Form.Dropdown
+              label="Gender"
+              name="gender"
+              selection
+              //   control={Dropdown}
+              placeholder={userDetails.gender}
+              options={genderOptions}
+              defaultValue={userDetails.gender}
+              onChange={handleChange}
+            /> */}
+            <p>Gender</p>
+            <Select
+              name="gender"
+              placeholder={userDetails.gender}
+              options={genderOptions}
+              defaultValue={userDetails.gender}
+              //   onChange={handleChange}
+              onChange={handleSelectChange}
             />
 
-            {/* TODO: Use a Select */}
-            <Form.Input
+            {/* <Form.Input
               label="Preference"
               name="preference"
               placeholder="Preference"
               defaultValue={userDetails.preference}
               onChange={handleChange}
-            />
+            /> */}
 
+            {/* <Form.Field
+              label="Preference"
+              name="preference"
+              selection
+              control={Dropdown}
+              placeholder={userDetails.preference}
+              options={preferenceOptions}
+              defaultValue={userDetails.preference}
+              onChange={handleChange}
+            /> */}
+
+            <p>Preference</p>
+            <Select
+              name="preference"
+              placeholder={userDetails.preference}
+              options={preferenceOptions}
+              defaultValue={userDetails.preference}
+              onChange={handleSelectChange}
+            />
             <Button onClick={updateDetails} color="red" fluid>
               Save
             </Button>
