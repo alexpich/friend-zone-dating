@@ -14,7 +14,7 @@ import {
 import AuthService from "../services/auth.service";
 
 const PwCaption = styled.p`
-  color: #a0a0a0;
+  color: #ededed;
   text-align: left;
   font-size: 0.8rem;
   margin-top: -0.8rem;
