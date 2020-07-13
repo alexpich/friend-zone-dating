@@ -97,6 +97,16 @@ const EditProfileComponent = () => {
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
+  const [imageOneId, setImageOneId] = useState(null);
+  const [imageTwoId, setImageTwoId] = useState(null);
+  const [imageThreeId, setImageThreeId] = useState(null);
+
+  //    About
+  //   let initialCharacterMax = 500 - userDetails.about.length;
+  let initialCharacterMax = 500;
+  const [aboutCharactersLeft, setAboutCharactersLeft] = useState(
+    initialCharacterMax
+  );
 
   //   Retrieves images after render
   useEffect(() => {
@@ -105,19 +115,30 @@ const EditProfileComponent = () => {
         .then((res) => {
           if (res.data[0] !== null) {
             setImageOne(res.data[0].url);
+            setImageOneId(res.data[0].id);
           }
           if (res.data[1] !== null) {
             setImageTwo(res.data[1].url);
+            setImageTwoId(res.data[1].id);
           }
           if (res.data[2] !== null) {
             setImageThree(res.data[2].url);
+            setImageThreeId(res.data[2].id);
           }
         })
         .catch((e) => {
           console.log(e);
         });
     }
-  }, [currentUser, imageOne]);
+  }, [
+    currentUser,
+    imageOne,
+    imageTwo,
+    imageThree,
+    imageOneId,
+    imageTwoId,
+    imageThreeId,
+  ]);
 
   // Retrieve User details after render
   useEffect(() => {
@@ -131,9 +152,6 @@ const EditProfileComponent = () => {
       });
   }, []);
 
-  //    About
-  //   const [aboutCharactersLeft, setAboutCharactersLeft] = useState(500);
-
   const genderOptions = [
     { value: "Man", label: "Man" },
     { value: "Woman", label: "Woman" },
@@ -146,8 +164,15 @@ const EditProfileComponent = () => {
     { value: "Any", label: "Any" },
   ];
 
+  let initialFileInput1 = null;
+  let initialFileInput2 = null;
+  let initialFileInput3 = null;
+
   // Uploading images
   const uploadFile = async (e) => {
+    let id = e.target.id;
+    console.log("the uploaded id is:" + id);
+
     console.log("Uploading image...");
     const files = e.target.files;
     const data = new FormData();
@@ -171,7 +196,7 @@ const EditProfileComponent = () => {
         // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
         const imageData = {
           url: response.data.secure_url,
-          order: 1,
+          order: id,
           userId: currentUser.id,
         };
 
@@ -181,93 +206,16 @@ const EditProfileComponent = () => {
         // Get the image so that we can display it
         ImageService.get(imageData.id)
           .then((res) => {
-            setImageOne(imageData.url);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      })
-      .catch((e) => console.log(e));
-  };
-
-  const uploadFile2 = async (e) => {
-    console.log("Uploading image...");
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "friendzone");
-
-    // Posts to Cloudinary
-    const res = await axios
-      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-        onUploadProgress: (progressEvent) => {
-          //   TODO: Animate this
-          console.log(
-            "Upload progress:" +
-              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-              "%"
-          );
-        },
-      })
-      // TODO: Rewrite this to use async await later
-      .then((response) => {
-        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-        const imageData = {
-          url: response.data.secure_url,
-          order: 2,
-          userId: currentUser.id,
-        };
-
-        //Post info to DB
-        ImageService.create(imageData);
-
-        // Get the image so that we can display it
-        ImageService.get(imageData.id)
-          .then((res) => {
-            setImageTwo(imageData.url);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      })
-      .catch((e) => console.log(e));
-  };
-
-  const uploadFile3 = async (e) => {
-    console.log("Uploading image...");
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "friendzone");
-
-    // Posts to Cloudinary
-    const res = await axios
-      .post("https://api.cloudinary.com/v1_1/bpeach/image/upload", data, {
-        onUploadProgress: (progressEvent) => {
-          //   TODO: Animate this
-          console.log(
-            "Upload progress:" +
-              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-              "%"
-          );
-        },
-      })
-      // TODO: Rewrite this to use async await later
-      .then((response) => {
-        // const currentUserId = JSON.parse(localStorage.getItem("user")).id;
-        const imageData = {
-          url: response.data.secure_url,
-          order: 3,
-          userId: currentUser.id,
-        };
-
-        //Post info to DB
-        ImageService.create(imageData);
-
-        // Get the image so that we can display it
-        ImageService.get(imageData.id)
-          .then((res) => {
-            setImageThree(imageData.url);
+            if (id == 1) {
+              setImageOne(imageData.url);
+              setImageOneId(imageData.id);
+            } else if (id == 2) {
+              setImageTwo(imageData.url);
+              setImageTwoId(imageData.id);
+            } else if (id == 3) {
+              setImageThree(imageData.url);
+              setImageThreeId(imageData.id);
+            }
           })
           .catch((e) => {
             console.log(e);
@@ -277,9 +225,25 @@ const EditProfileComponent = () => {
   };
 
   const deletePhoto = async (e) => {
-    // const res = await axios.delete
-    console.log("Deleting photo...");
     e.preventDefault();
+
+    // Delete the image from the database
+    let id = e.target.id;
+    console.log("the photo to be deleted is: " + id);
+    if (id == 1) {
+      ImageService.delete(imageOneId);
+      setImageOneId(null);
+    }
+    if (id == 2) {
+      console.log(imageTwo);
+      ImageService.delete(imageTwoId);
+      setImageTwoId(null);
+    }
+    if (id == 3) {
+      ImageService.delete(imageThreeId);
+      setImageThreeId(null);
+    }
+    console.log("Deleting photo...");
   };
 
   const updateDetails = (e) => {
@@ -299,7 +263,10 @@ const EditProfileComponent = () => {
       ...userDetails,
       [name]: value,
     });
-    console.log(result);
+
+    let charactersLeft = 500 - userDetails.about.length;
+    console.log(charactersLeft);
+    setAboutCharactersLeft(charactersLeft);
   };
 
   const handleSelectChange = (value, action) => {
@@ -307,12 +274,7 @@ const EditProfileComponent = () => {
       ...userDetails,
       [action.name]: value.value,
     });
-    console.log(userDetails);
   };
-
-  let initialFileInput1 = null;
-  let initialFileInput2 = null;
-  let initialFileInput3 = null;
 
   return (
     <div>
@@ -321,7 +283,7 @@ const EditProfileComponent = () => {
           <input
             style={{ display: "none" }}
             type="file"
-            id="file"
+            id={1}
             name="file"
             placeholder="Upload an image"
             required
@@ -331,21 +293,21 @@ const EditProfileComponent = () => {
           <input
             style={{ display: "none" }}
             type="file"
-            id="file"
+            id={2}
             name="file"
             placeholder="Upload an image"
             required
-            onChange={uploadFile2}
+            onChange={uploadFile}
             ref={(fileInput) => (initialFileInput2 = fileInput)}
           />
           <input
             style={{ display: "none" }}
             type="file"
-            id="file"
+            id={3}
             name="file"
             placeholder="Upload an image"
             required
-            onChange={uploadFile3}
+            onChange={uploadFile}
             ref={(fileInput) => (initialFileInput3 = fileInput)}
           />
           <EditPhotosContainer>
@@ -353,7 +315,9 @@ const EditProfileComponent = () => {
               <UploadImage1>
                 <div>
                   <img src={imageOne} alt="Default" />
-                  <button onClick={deletePhoto}>x</button>
+                  <button id={1} onClick={deletePhoto}>
+                    x
+                  </button>
                 </div>
               </UploadImage1>
             ) : (
@@ -369,7 +333,9 @@ const EditProfileComponent = () => {
               <UploadImage2>
                 <div>
                   <img src={imageTwo} alt="Second" />
-                  <button onClick={deletePhoto}>x</button>
+                  <button id={2} onClick={deletePhoto}>
+                    x
+                  </button>
                 </div>
               </UploadImage2>
             ) : (
@@ -385,7 +351,9 @@ const EditProfileComponent = () => {
               <UploadImage3>
                 <div>
                   <img src={imageThree} alt="Third" />
-                  <button onClick={deletePhoto}>x</button>
+                  <button id={3} onClick={deletePhoto}>
+                    x
+                  </button>
                 </div>
               </UploadImage3>
             ) : (
@@ -406,10 +374,11 @@ const EditProfileComponent = () => {
               name="about"
               placeholder="I like long walks on the beach and gazing upon the stars..."
               style={{ minHeight: 100, maxHeight: 100 }}
-              //   maxLength={}
+              maxLength={500}
               defaultValue={userDetails.about}
               onChange={handleChange}
             />
+            <p>{aboutCharactersLeft}</p>
 
             <Form.Input
               label="Job Title"
@@ -437,62 +406,14 @@ const EditProfileComponent = () => {
               onChange={handleChange}
             />
 
-            {/* <Form.Input
-              label="Gender"
-              name="gender"
-              placeholder="Gender"
-              defaultValue={userDetails.gender}
-              onChange={handleChange}
-            /> */}
-
-            {/* <Dropdown
-              label="gender"
-              name="gender"
-              placeholder={userDetails.gender}
-              options={options}
-              defaultValue={userDetails.gender}
-              selection
-              onChange={handleChange}
-            /> */}
-
-            {/* <Form.Dropdown
-              label="Gender"
-              name="gender"
-              selection
-              //   control={Dropdown}
-              placeholder={userDetails.gender}
-              options={genderOptions}
-              defaultValue={userDetails.gender}
-              onChange={handleChange}
-            /> */}
             <p>Gender</p>
             <Select
               name="gender"
               placeholder={userDetails.gender}
               options={genderOptions}
               defaultValue={userDetails.gender}
-              //   onChange={handleChange}
               onChange={handleSelectChange}
             />
-
-            {/* <Form.Input
-              label="Preference"
-              name="preference"
-              placeholder="Preference"
-              defaultValue={userDetails.preference}
-              onChange={handleChange}
-            /> */}
-
-            {/* <Form.Field
-              label="Preference"
-              name="preference"
-              selection
-              control={Dropdown}
-              placeholder={userDetails.preference}
-              options={preferenceOptions}
-              defaultValue={userDetails.preference}
-              onChange={handleChange}
-            /> */}
 
             <p>Preference</p>
             <Select
