@@ -20,9 +20,10 @@ class ImageService {
   //     return axios.put(`/users/${id}`, data);
   //   }
 
-  //   delete(id) {
-  //     return axios.delete(`/users/${id}`);
-  //   }
+  delete(id) {
+    // return axios.delete(`/users/${id}`);
+    return axios.delete(API_URL + id, { headers: authHeader() });
+  }
 }
 
 export default new ImageService();

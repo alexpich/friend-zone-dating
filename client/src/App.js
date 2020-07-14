@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 
 import { UserContext } from "./context/UserContext";
 

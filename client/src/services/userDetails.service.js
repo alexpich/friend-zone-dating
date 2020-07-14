@@ -13,7 +13,6 @@ class UserDetailsService {
   }
 
   update(id, data) {
-    // return axios.put(API_URL + id, data, { headers: authHeader() });
     return axios.put(API_URL + id, data, { headers: authHeader() });
   }
 }
