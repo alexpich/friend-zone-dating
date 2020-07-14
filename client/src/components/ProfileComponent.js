@@ -54,8 +54,8 @@ const ProfileComponent = () => {
         <Segment style={{ overflow: "auto", maxHeight: 600 }}>
           <PhotosContainer>
             {imageOne ? <img src={imageOne} alt="Default" /> : ""}
-            {/* {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
-            {imageThree ? <img src={imageThree} alt="Third" /> : ""} */}
+            {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
+            {imageThree ? <img src={imageThree} alt="Third" /> : ""}
           </PhotosContainer>
           <p className="name">
             {currentUser.firstName + " " + currentUser.lastName},{" "}

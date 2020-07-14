@@ -24,7 +24,7 @@ const Nav = () => {
     <Menu secondary fixed="top">
       {userFromSession !== null ? (
         <>
-          <Menu.Item name="lovezone" exact as={NavLink} to="/lovezone" />
+          <Menu.Item name="friendzone" exact as={NavLink} to="/friendzone" />
           <Menu.Item
             as={NavLink}
             exact

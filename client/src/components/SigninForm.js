@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 
 import AuthService from "../services/auth.service";
+import UserDetailsService from "../services/userDetails.service";
 
 import { UserContext } from "../context/UserContext";
 
@@ -21,6 +22,7 @@ const SigninForm = () => {
   };
 
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [detailsId, setDetailsId] = React.useState(null);
 
   const [user, setUser] = useState(initialUserState);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -55,8 +57,29 @@ const SigninForm = () => {
         setCurrentUser(userFromSession);
         console.log("successfully logged in");
 
-        // Redirect
-        history.push("/lovezone");
+        UserDetailsService.get(userFromSession.id)
+          // UserDetailsService.get(userFromSession.id)
+          .then((res) => {
+            // setLoading(true);
+            const response = res.data[0];
+            const id = response.id;
+            console.log(response); // setDetailsId(id);
+            // console.log(detailsId);
+          })
+          .catch((e) => {
+            console.log(e);
+            UserDetailsService.create({
+              about: "",
+              jobTitle: "",
+              school: "",
+              location: "",
+              gender: "",
+              preference: "",
+              userId: userFromSession.id,
+            }).then(() => {
+              setDetailsId(userFromSession.id);
+            });
+          });
       })
       .catch((e) => {
         setErrorMessage(true);

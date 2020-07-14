@@ -20,6 +20,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.image = require("../models/image.model.js")(sequelize, Sequelize);
+db.like = require("../models/likes.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.userDetails = require("../models/userDetails.model.js")(
