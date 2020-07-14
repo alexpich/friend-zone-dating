@@ -10,8 +10,20 @@ import UserDetailsService from "../services/userDetails.service";
 
 const Matches = () => {
   const { currentUser, setCurrentUser } = React.useContext(UserContext);
-  
-  const detailsId = UserDetailsService.get(currentUser.id);
+  const [detailsId, setDetailsId] = React.useState(null);
+
+  UserDetailsService.get(currentUser.id)
+    .then((res) => {
+      const response = res.data[0];
+      const id = response.id;
+      console.log("CU" + currentUser.id);
+      console.log("details:" + id);
+      setDetailsId(id);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+
   return (
     <div className="container">
       <Grid columns={2} stackable>
@@ -19,7 +31,7 @@ const Matches = () => {
           <SidebarNav />
         </Grid.Column>
         <Grid.Column>
-          {currentUser === detailsId.id ? (
+          {currentUser.id == detailsId ? (
             <LoveZoneComponent />
           ) : (
             <CreateUserDetailsForm />

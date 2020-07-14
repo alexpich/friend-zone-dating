@@ -1,15 +1,12 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
   Button,
   Form,
   Grid,
   Header,
   Image,
-  Message,
   Segment,
-  Icon,
   TextArea,
 } from "semantic-ui-react";
 import Select from "react-select";
@@ -19,6 +16,8 @@ import { UserContext } from "../context/UserContext";
 
 const CreateUserDetailsForm = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
+
+  const history = useHistory();
 
   //Initial user details
   const initialUserDetails = {
@@ -33,6 +32,9 @@ const CreateUserDetailsForm = () => {
 
   // Loading state
   const [isLoading, setIsLoading] = useState(false);
+
+  // Rerender
+  const [rerender, setRerender] = useState(false);
 
   //   User Details
   const [userDetails, setUserDetails] = useState(initialUserDetails);
@@ -80,13 +82,18 @@ const CreateUserDetailsForm = () => {
       .finally(() => {
         setIsLoading(false);
       });
+    setRerender(true);
   };
+
+  useEffect(() => {
+    history.push("/lovezone");
+  }, [rerender]);
 
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as="h2" color="red" textAlign="center">
-          <Image src="/logo.png" /> Your Profile
+          <Image src="/logo.png" /> Create Your Profile
         </Header>
         <Form size="large">
           <Segment stacked>
