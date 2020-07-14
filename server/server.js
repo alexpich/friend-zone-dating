@@ -33,6 +33,7 @@ app.get("/", (req, res) => {
 // Routes
 require("./routes/auth.routes")(app);
 require("./routes/image.routes")(app);
+require("./routes/likes.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/userDetails.routes")(app);
 
