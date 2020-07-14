@@ -9,10 +9,7 @@ import {
   Image,
   Message,
   Segment,
-  Icon,
-  TextArea,
 } from "semantic-ui-react";
-import Select from "react-select";
 
 import AuthService from "../services/auth.service";
 
@@ -166,7 +163,7 @@ const SignupForm = () => {
       )
         .then((response) => {
           setUser({
-            id: data.id,
+            // id: data.id,
             email: data.email,
             firstName: data.firstName,
             lastName: data.lastName,

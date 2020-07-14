@@ -12,7 +12,7 @@ const NotSignedInRoute = ({ component: Component, ...rest }) => {
       render={(props) =>
         isAuthenticated ? (
           <Redirect
-            to={{ pathname: "/lovezone", state: { from: props.location } }}
+            to={{ pathname: "/friendzone", state: { from: props.location } }}
           />
         ) : (
           <Component {...props} />

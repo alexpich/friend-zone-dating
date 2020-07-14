@@ -86,7 +86,7 @@ const CreateUserDetailsForm = () => {
   };
 
   useEffect(() => {
-    history.push("/lovezone");
+    history.push("/friendzone");
   }, [rerender]);
 
   return (

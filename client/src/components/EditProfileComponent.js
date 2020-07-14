@@ -2,12 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import {
-  Button,
-  Form,
-  Segment,
-  TextArea,
-} from "semantic-ui-react";
+import { Button, Form, Segment, TextArea } from "semantic-ui-react";
 import Select from "react-select";
 
 import { UserContext } from "../context/UserContext";
@@ -85,7 +80,7 @@ const EditProfileComponent = () => {
     location: "",
     gender: "",
     preference: "",
-    userId: null,
+    userId: currentUser.id,
   };
 
   //   User Details
@@ -143,7 +138,10 @@ const EditProfileComponent = () => {
     UserDetailsService.get(currentUser.id)
       .then((res) => {
         const response = res.data[0];
-        setUserDetails(response);
+        console.log(response);
+        if (response) {
+          setUserDetails(response);
+        }
       })
       .catch((e) => {
         console.log(e);
