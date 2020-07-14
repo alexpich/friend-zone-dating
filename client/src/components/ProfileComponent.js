@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Button, Segment } from "semantic-ui-react";
+import { Button, Form, Segment } from "semantic-ui-react";
 
 import ImageService from "../services/image.service";
 import { UserContext } from "../context/UserContext";
@@ -9,8 +9,6 @@ import { UserContext } from "../context/UserContext";
 // TODO: Change these photos from a grid pattern to a single picture that can be cycled through
 
 const ProfileCard = styled.div`
-  /* border: 1px solid black; */
-  /* height: 50vh; */
   .name {
     text-transform: capitalize;
   }
@@ -21,8 +19,8 @@ const PhotosContainer = styled.div`
   justify-content: space-between;
   img {
     object-fit: cover;
-    width: 120px;
-    height: 150px;
+    width: 100%;
+    height: 400px;
   }
 `;
 
@@ -44,7 +42,7 @@ const ProfileComponent = () => {
           setImageThree(res.data[2].url);
         })
         .catch((e) => {
-          // console.log(e);
+          console.log(e);
         });
     }
   }, [currentUser, imageOne]);
@@ -52,13 +50,12 @@ const ProfileComponent = () => {
   return (
     <div>
       <h1>ProfileComponent</h1>
-      {/* <p>{JSON.stringify(currentUser)}</p> */}
       <ProfileCard>
         <Segment style={{ overflow: "auto", maxHeight: 600 }}>
           <PhotosContainer>
             {imageOne ? <img src={imageOne} alt="Default" /> : ""}
-            {imageTwo ? <img src={imageTwo} alt="Default" /> : ""}
-            {imageThree ? <img src={imageThree} alt="Default" /> : ""}
+            {/* {imageTwo ? <img src={imageTwo} alt="Second" /> : ""}
+            {imageThree ? <img src={imageThree} alt="Third" /> : ""} */}
           </PhotosContainer>
           <p className="name">
             {currentUser.firstName + " " + currentUser.lastName},{" "}

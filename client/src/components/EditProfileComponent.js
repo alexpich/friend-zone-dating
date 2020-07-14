@@ -7,8 +7,6 @@ import {
   Form,
   Segment,
   TextArea,
-  Dropdown,
-  Label,
 } from "semantic-ui-react";
 import Select from "react-select";
 
@@ -87,7 +85,7 @@ const EditProfileComponent = () => {
     location: "",
     gender: "",
     preference: "",
-    userId: 1,
+    userId: null,
   };
 
   //   User Details

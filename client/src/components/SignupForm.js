@@ -9,12 +9,15 @@ import {
   Image,
   Message,
   Segment,
+  Icon,
+  TextArea,
 } from "semantic-ui-react";
+import Select from "react-select";
 
 import AuthService from "../services/auth.service";
 
 const PwCaption = styled.p`
-  color: #ededed;
+  color: #a0a0a0;
   text-align: left;
   font-size: 0.8rem;
   margin-top: -0.8rem;
@@ -58,7 +61,7 @@ const SignupForm = () => {
   const [lastNameError, setLastNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleUserInputChange = (e) => {
     const { name, value } = e.target;
     setUser({
       ...user,
@@ -219,7 +222,7 @@ const SignupForm = () => {
               iconPosition="left"
               placeholder="E-mail address"
               value={user.email}
-              onChange={handleInputChange}
+              onChange={handleUserInputChange}
               name="email"
             />
             {emailError ? (
@@ -233,7 +236,7 @@ const SignupForm = () => {
               iconPosition="left"
               placeholder="First Name"
               value={user.firstName}
-              onChange={handleInputChange}
+              onChange={handleUserInputChange}
               name="firstName"
             />
             {firstNameError ? (
@@ -249,7 +252,7 @@ const SignupForm = () => {
               iconPosition="left"
               placeholder="Last Name"
               value={user.lastName}
-              onChange={handleInputChange}
+              onChange={handleUserInputChange}
               name="lastName"
             />
             {lastNameError ? (
@@ -266,7 +269,7 @@ const SignupForm = () => {
               placeholder="Password"
               type="password"
               value={user.password}
-              onChange={handleInputChange}
+              onChange={handleUserInputChange}
               name="password"
             />
             <PwCaption>
@@ -281,6 +284,19 @@ const SignupForm = () => {
             ) : (
               ""
             )}
+            {/* <Button
+                  color="red"
+                  onClick={validateFirstForm}
+                  disabled={
+                    !user.email ||
+                    !user.firstName ||
+                    !user.lastName ||
+                    !user.password
+                  }
+                >
+                  <Icon color="white" name="long arrow alternate right" />
+                </Button> */}
+
             <Button
               color="red"
               fluid
