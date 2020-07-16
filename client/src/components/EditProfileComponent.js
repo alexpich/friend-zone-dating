@@ -223,6 +223,8 @@ const EditProfileComponent = () => {
   const deletePhoto = async (e) => {
     e.preventDefault();
 
+    // Delete from cloudinary
+
     // Delete the image from the database
     let id = e.target.id;
     console.log("the photo to be deleted is: " + id);

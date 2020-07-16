@@ -11,7 +11,7 @@ exports.create = (req, res) => {
   };
   Image.create(image)
     .then((data) => {
-    //   console.log(data);
+      //   console.log(data);
       res.send(data);
     })
     .catch((err) => {
