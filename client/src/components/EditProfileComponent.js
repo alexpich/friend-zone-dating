@@ -418,13 +418,13 @@ const EditProfileComponent = (props) => {
             />
 
             {/* TODO: Search location */}
-            <Form.Input
+            {/* <Form.Input
               label="Location"
               name="location"
               placeholder="Add Location"
               defaultValue={userDetails.location}
               onChange={handleChange}
-            />
+            /> */}
 
             <p>Gender</p>
             <Select

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -67,12 +67,6 @@ const SignupForm = (props) => {
       ...user,
       [name]: value,
     });
-  };
-
-  const innerRef = useRef();
-
-  const getLocation = () => {
-    innerRef.current && innerRef.current.getLocation();
   };
 
   // Returns true if valid email
@@ -148,11 +142,6 @@ const SignupForm = (props) => {
   const saveUser = (e) => {
     e.preventDefault();
 
-    // let point = {
-    //   type: "Point",
-    //   coordinates: [props.coords.latitude, props.coords.longitude],
-    // };
-
     let data = {
       email: user.email,
       firstName: user.firstName,
@@ -161,9 +150,6 @@ const SignupForm = (props) => {
       latitude: props.coords.latitude,
       longitude: props.coords.longitude,
     };
-
-    console.log(data.latitude);
-    console.log(data.longitude);
 
     const isValid = validate(
       data.email,
@@ -184,7 +170,6 @@ const SignupForm = (props) => {
       )
         .then((response) => {
           setUser({
-            // id: data.id,
             email: data.email,
             firstName: data.firstName,
             lastName: data.lastName,
@@ -314,13 +299,6 @@ const SignupForm = (props) => {
               name="point"
               // disabled
             /> */}
-            <Button
-              className="pure-button pure-button-primary"
-              onClick={getLocation}
-              type="button"
-            >
-              Get location
-            </Button>
 
             <Button
               color="red"
