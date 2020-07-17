@@ -2,17 +2,6 @@ const db = require("../models");
 const User = db.user;
 const Op = db.Sequelize.Op;
 
-//test
-exports.allAccess = (req, res) => {
-  res.status(200).send("Public Content.");
-};
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
-};
-exports.adminBoard = (req, res) => {
-  res.status(200).send("/profile");
-};
-
 // Retrieve all user from the database.
 exports.findAll = (req, res) => {
   const email = req.query.email;
@@ -28,6 +17,23 @@ exports.findAll = (req, res) => {
       });
     });
 };
+
+// Retrieve 15 users from the database where the location is within a certain amount
+// exports.findFifteenUsers = (req, res) => {
+//   const email = req.query.email;
+//   var condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
+
+//   User.findAll({ where: condition })
+//     .then((data) => {
+//       res.send(data);
+//     })
+//     .catch((err) => {
+//       res.status(500).send({
+//         message: err.message || "Some error occurred while retrieving users.",
+//       });
+//     });
+// };
+
 
 // Find a single User with an id
 exports.findOne = (req, res) => {

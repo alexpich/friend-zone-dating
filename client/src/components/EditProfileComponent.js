@@ -9,6 +9,8 @@ import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
 import UserDetailsService from "../services/userDetails.service";
 
+import { geolocated } from "react-geolocated";
+
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 // TODO: 3) Refactor into multiple components
 const ProfileCard = styled.div`
@@ -65,7 +67,7 @@ const UploadImage3 = styled.div`
   height: 150px;
 `;
 
-const EditProfileComponent = () => {
+const EditProfileComponent = (props) => {
   // Current user
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
@@ -223,6 +225,8 @@ const EditProfileComponent = () => {
   const deletePhoto = async (e) => {
     e.preventDefault();
 
+    // Delete from cloudinary
+
     // Delete the image from the database
     let id = e.target.id;
     console.log("the photo to be deleted is: " + id);
@@ -274,6 +278,26 @@ const EditProfileComponent = () => {
 
   return (
     <div>
+      {!props.isGeolocationAvailable ? (
+        <div>Your browser does not support Geolocation</div>
+      ) : !props.isGeolocationEnabled ? (
+        <div>Geolocation is not enabled</div>
+      ) : props.coords ? (
+        <table>
+          <tbody>
+            <tr>
+              <td>latitude</td>
+              <td>{props.coords.latitude}</td>
+            </tr>
+            <tr>
+              <td>longitude</td>
+              <td>{props.coords.longitude}</td>
+            </tr>
+          </tbody>
+        </table>
+      ) : (
+        <div>Getting the location data&hellip; </div>
+      )}
       <ProfileCard>
         <Segment style={{ overflow: "auto", maxHeight: 600 }}>
           <input
@@ -394,13 +418,13 @@ const EditProfileComponent = () => {
             />
 
             {/* TODO: Search location */}
-            <Form.Input
+            {/* <Form.Input
               label="Location"
               name="location"
               placeholder="Add Location"
               defaultValue={userDetails.location}
               onChange={handleChange}
-            />
+            /> */}
 
             <p>Gender</p>
             <Select
@@ -429,4 +453,10 @@ const EditProfileComponent = () => {
   );
 };
 
-export default EditProfileComponent;
+// export default EditProfileComponent;
+export default geolocated({
+  positionOptions: {
+    enableHighAccuracy: false,
+  },
+  userDecisionTimeout: 10000,
+})(EditProfileComponent);
