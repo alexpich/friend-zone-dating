@@ -75,6 +75,8 @@ exports.signup = (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: bcrypt.hashSync(req.body.password, 8),
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
     })
       .then((user) => {
         if (req.body.roles) {

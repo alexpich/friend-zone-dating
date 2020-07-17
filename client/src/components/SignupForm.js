@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -10,6 +10,7 @@ import {
   Message,
   Segment,
 } from "semantic-ui-react";
+import { geolocated } from "react-geolocated";
 
 import AuthService from "../services/auth.service";
 
@@ -20,13 +21,15 @@ const PwCaption = styled.p`
   margin-top: -0.8rem;
 `;
 
-const SignupForm = () => {
+const SignupForm = (props) => {
   const initialUserState = {
     id: null,
     email: "",
     firstName: "",
     lastName: "",
     password: "",
+    latitude: null,
+    longitude: null,
   };
 
   const initialErrorState = {
@@ -64,6 +67,12 @@ const SignupForm = () => {
       ...user,
       [name]: value,
     });
+  };
+
+  const innerRef = useRef();
+
+  const getLocation = () => {
+    innerRef.current && innerRef.current.getLocation();
   };
 
   // Returns true if valid email
@@ -139,12 +148,22 @@ const SignupForm = () => {
   const saveUser = (e) => {
     e.preventDefault();
 
+    // let point = {
+    //   type: "Point",
+    //   coordinates: [props.coords.latitude, props.coords.longitude],
+    // };
+
     let data = {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       password: user.password,
+      latitude: props.coords.latitude,
+      longitude: props.coords.longitude,
     };
+
+    console.log(data.latitude);
+    console.log(data.longitude);
 
     const isValid = validate(
       data.email,
@@ -159,7 +178,9 @@ const SignupForm = () => {
         data.email,
         data.firstName,
         data.lastName,
-        data.password
+        data.password,
+        data.latitude,
+        data.longitude
       )
         .then((response) => {
           setUser({
@@ -168,6 +189,8 @@ const SignupForm = () => {
             firstName: data.firstName,
             lastName: data.lastName,
             password: data.password,
+            latitude: data.latitude,
+            longitude: data.longitutde,
           });
 
           console.log("User created successfully");
@@ -281,18 +304,23 @@ const SignupForm = () => {
             ) : (
               ""
             )}
-            {/* <Button
-                  color="red"
-                  onClick={validateFirstForm}
-                  disabled={
-                    !user.email ||
-                    !user.firstName ||
-                    !user.lastName ||
-                    !user.password
-                  }
-                >
-                  <Icon color="white" name="long arrow alternate right" />
-                </Button> */}
+            {/* <Form.Input
+              fluid
+              icon="location arrow"
+              iconPosition="left"
+              placeholder="Location"
+              value={user.point}
+              onChange={handleUserInputChange}
+              name="point"
+              // disabled
+            /> */}
+            <Button
+              className="pure-button pure-button-primary"
+              onClick={getLocation}
+              type="button"
+            >
+              Get location
+            </Button>
 
             <Button
               color="red"
@@ -307,6 +335,26 @@ const SignupForm = () => {
             >
               {isLoading ? "Loading..." : "Sign Up"}
             </Button>
+            {!props.isGeolocationAvailable ? (
+              <div>Your browser does not support Geolocation</div>
+            ) : !props.isGeolocationEnabled ? (
+              <div>Geolocation is not enabled</div>
+            ) : props.coords ? (
+              <table>
+                <tbody>
+                  <tr>
+                    <td>latitude</td>
+                    <td>{props.coords.latitude}</td>
+                  </tr>
+                  <tr>
+                    <td>longitude</td>
+                    <td>{props.coords.longitude}</td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <div>Getting the location data&hellip; </div>
+            )}
           </Segment>
         </Form>
         <Message>
@@ -317,4 +365,9 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default geolocated({
+  positionOptions: {
+    enableHighAccuracy: false,
+  },
+  userDecisionTimeout: 5000,
+})(SignupForm);

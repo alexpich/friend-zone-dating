@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Segment } from "semantic-ui-react";
 
 const FriendZoneComponent = () => {
+  // const initialState = {};
+
+  // const [users, setUsers] = useState(initialState);
+
+  // useEffect(() => {
+
+  // }, [])
+
   return (
     <div>
-      <h1>FriendZoneComponent</h1>
-      <p>Card stack will go here</p>
+      <Segment style={{ overflow: "auto", maxHeight: 600 }}>
+        <p>get users from the database and display them here</p>
+      </Segment>
     </div>
   );
 };
