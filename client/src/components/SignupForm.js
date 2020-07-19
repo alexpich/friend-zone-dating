@@ -10,7 +10,6 @@ import {
   Message,
   Segment,
 } from "semantic-ui-react";
-import { geolocated } from "react-geolocated";
 
 import AuthService from "../services/auth.service";
 
@@ -289,16 +288,7 @@ const SignupForm = (props) => {
             ) : (
               ""
             )}
-            {/* <Form.Input
-              fluid
-              icon="location arrow"
-              iconPosition="left"
-              placeholder="Location"
-              value={user.point}
-              onChange={handleUserInputChange}
-              name="point"
-              // disabled
-            /> */}
+            {/* Profile Photo */}
 
             <Button
               color="red"
@@ -313,26 +303,6 @@ const SignupForm = (props) => {
             >
               {isLoading ? "Loading..." : "Sign Up"}
             </Button>
-            {!props.isGeolocationAvailable ? (
-              <div>Your browser does not support Geolocation</div>
-            ) : !props.isGeolocationEnabled ? (
-              <div>Geolocation is not enabled</div>
-            ) : props.coords ? (
-              <table>
-                <tbody>
-                  <tr>
-                    <td>latitude</td>
-                    <td>{props.coords.latitude}</td>
-                  </tr>
-                  <tr>
-                    <td>longitude</td>
-                    <td>{props.coords.longitude}</td>
-                  </tr>
-                </tbody>
-              </table>
-            ) : (
-              <div>Getting the location data&hellip; </div>
-            )}
           </Segment>
         </Form>
         <Message>
@@ -343,9 +313,4 @@ const SignupForm = (props) => {
   );
 };
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 5000,
-})(SignupForm);
+export default SignupForm;
