@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Segment, Button } from "semantic-ui-react";
-import { geolocated } from "react-geolocated";
 
 import { UserContext } from "../context/UserContext";
 import UserService from "../services/user.service";
@@ -8,6 +7,7 @@ import UserService from "../services/user.service";
 const FriendZoneComponent = (props) => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
+  const [loading, setLoading] = useState(false);
   const initialState = {
     latitude: null,
     longitude: null,
@@ -17,18 +17,22 @@ const FriendZoneComponent = (props) => {
 
   // console.log(userLocation);
   useEffect(() => {
-    if (props.coords) {
+    navigator.geolocation.getCurrentPosition(function (position) {
       setUserLocation({
-        latitude: props.coords.latitude,
-        longitude: props.coords.longitude,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
       });
-    }
+      // console.log("Latitude is :", position.coords.latitude);
+      // console.log("Longitude is :", position.coords.longitude);
+      // console.log(userLocation);
+    });
+  }, []);
 
+  useEffect(() => {
     let data = {
       latitude: userLocation.latitude,
       longitude: userLocation.longitude,
     };
-    console.log(data);
 
     UserService.update(currentUser.id, data)
       .then((res) => {
@@ -37,30 +41,13 @@ const FriendZoneComponent = (props) => {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+    console.log(userLocation);
+  }, [userLocation]);
 
   return (
     <div>
-      {!props.isGeolocationAvailable ? (
-        <div>Your browser does not support Geolocation</div>
-      ) : !props.isGeolocationEnabled ? (
-        <div>Geolocation is not enabled</div>
-      ) : props.coords ? (
-        <table>
-          <tbody>
-            <tr>
-              <td>latitude</td>
-              <td>{props.coords.latitude}</td>
-            </tr>
-            <tr>
-              <td>longitude</td>
-              <td>{props.coords.longitude}</td>
-            </tr>
-          </tbody>
-        </table>
-      ) : (
-        <div>Getting the location data&hellip; </div>
-      )}
+      <p>Current latitude: {userLocation.latitude}</p>
+      <p>Current longitude: {userLocation.longitude}</p>
       <Segment style={{ overflow: "auto", maxHeight: 600 }}>
         <p>get users from the database and display them here</p>
       </Segment>
@@ -68,8 +55,4 @@ const FriendZoneComponent = (props) => {
   );
 };
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-})(FriendZoneComponent);
+export default FriendZoneComponent;

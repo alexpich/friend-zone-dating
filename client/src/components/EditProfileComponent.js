@@ -9,8 +9,6 @@ import { UserContext } from "../context/UserContext";
 import ImageService from "../services/image.service";
 import UserDetailsService from "../services/userDetails.service";
 
-import { geolocated } from "react-geolocated";
-
 // TODO: 1) Find a way to refactor and optimize code (and follow DRY). 2) Rerender component on imageupload
 // TODO: 3) Refactor into multiple components
 const ProfileCard = styled.div`
@@ -278,26 +276,6 @@ const EditProfileComponent = (props) => {
 
   return (
     <div>
-      {!props.isGeolocationAvailable ? (
-        <div>Your browser does not support Geolocation</div>
-      ) : !props.isGeolocationEnabled ? (
-        <div>Geolocation is not enabled</div>
-      ) : props.coords ? (
-        <table>
-          <tbody>
-            <tr>
-              <td>latitude</td>
-              <td>{props.coords.latitude}</td>
-            </tr>
-            <tr>
-              <td>longitude</td>
-              <td>{props.coords.longitude}</td>
-            </tr>
-          </tbody>
-        </table>
-      ) : (
-        <div>Getting the location data&hellip; </div>
-      )}
       <ProfileCard>
         <Segment style={{ overflow: "auto", maxHeight: 600 }}>
           <input
@@ -454,9 +432,4 @@ const EditProfileComponent = (props) => {
 };
 
 // export default EditProfileComponent;
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 10000,
-})(EditProfileComponent);
+export default EditProfileComponent;
