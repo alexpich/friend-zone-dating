@@ -8,9 +8,12 @@ const API_URL = "http://localhost:5000/api/user/";
 class UserService {
   // TODO: Fix these
   // getAll() {
-  //   // return http.get("/users");
-  //   return axios.get("/users");
+  //   return axios.get(API_URL);
   // }
+
+  getTwentyUsers() {
+    return axios.get(API_URL);
+  }
 
   // get(id) {
   //   // return http.get(`/users/${id}`);
