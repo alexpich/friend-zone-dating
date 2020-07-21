@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Retrieve all user from the database.
 exports.findAll = (req, res) => {
   const email = req.query.email;
-  var condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
+  let condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
 
   User.findAll({ where: condition })
     .then((data) => {
@@ -22,7 +22,7 @@ exports.findAll = (req, res) => {
 exports.findTwentyUsers = (req, res) => {
   // TODO: Only display users within current user's search radius.
   User.scope("withoutPassword")
-    .findAll({ limit: 20 })
+    .findAll({ where: condition }, { limit: 20 })
     .then((data) => {
       res.send(data);
     })

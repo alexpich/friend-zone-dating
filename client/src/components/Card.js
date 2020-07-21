@@ -42,7 +42,7 @@ const Card = (props) => {
       });
   }, []);
 
-  // Get the image of the current profile
+  // Get the image of the first profile
   useEffect(() => {
     // console.log("displaying the profiles...");
     console.log(profiles);
@@ -54,7 +54,7 @@ const Card = (props) => {
         .then((res) => {
           console.log(res);
           setImages(res.data[0].url);
-        //   set
+          //   set
         })
         .catch((e) => {
           console.log(e);
@@ -64,7 +64,7 @@ const Card = (props) => {
 
   const pass = (id, otherId) => {
     // post a Like value of 0 for pass
-    LikesService.create(currentUser.id,);
+    LikesService.create(currentUser.id);
   };
   const like = () => {
     // post a Like value of 1 for like
@@ -78,8 +78,8 @@ const Card = (props) => {
         {imageThree ? <img src={imageThree} alt="Third" /> : ""} */}
         {images ? <img src={images} alt="Default" /> : ""}
       </PhotosContainer>
-      <button>PASS</button>
-      <button>LIKE</button>
+      <button onClick={pass}>PASS</button>
+      <button onClick={like}>LIKE</button>
       <p className="name">
         {/* {currentUser.firstName + " " + currentUser.lastName}, <span>Age</span> */}
       </p>
