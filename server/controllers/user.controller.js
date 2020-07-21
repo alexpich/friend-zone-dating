@@ -19,27 +19,26 @@ exports.findAll = (req, res) => {
 };
 
 // Retrieve 15 users from the database where the location is within a certain amount
-// exports.findFifteenUsers = (req, res) => {
-//   const email = req.query.email;
-//   var condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
-
-//   User.findAll({ where: condition })
-//     .then((data) => {
-//       res.send(data);
-//     })
-//     .catch((err) => {
-//       res.status(500).send({
-//         message: err.message || "Some error occurred while retrieving users.",
-//       });
-//     });
-// };
-
+exports.findTwentyUsers = (req, res) => {
+  // TODO: Only display users within current user's search radius.
+  User.scope("withoutPassword")
+    .findAll({ limit: 20 })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving users.",
+      });
+    });
+};
 
 // Find a single User with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  User.findByPk(id)
+  User.scope("withoutPassword")
+    .findByPk(id)
     .then((data) => {
       res.send(data);
     })

@@ -27,7 +27,6 @@ const PhotosContainer = styled.div`
 const ProfileComponent = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
-  const [hasImage, setHasImage] = useState(false);
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
@@ -36,7 +35,6 @@ const ProfileComponent = () => {
     if (currentUser) {
       ImageService.get(currentUser.id)
         .then((res) => {
-          setHasImage(true);
           setImageOne(res.data[0].url);
           setImageTwo(res.data[1].url);
           setImageThree(res.data[2].url);

@@ -8,14 +8,16 @@ const API_URL = "http://localhost:5000/api/user/";
 class UserService {
   // TODO: Fix these
   // getAll() {
-  //   // return http.get("/users");
-  //   return axios.get("/users");
+  //   return axios.get(API_URL);
   // }
 
-  // get(id) {
-  //   // return http.get(`/users/${id}`);
-  //   return axios.get(`/users/${id}`);
-  // }
+  getTwentyUsers() {
+    return axios.get(API_URL + "twenty");
+  }
+
+  getOne(id) {
+    return axios.get(API_URL + id);
+  }
 
   update(id, data) {
     return axios.put(API_URL + id, data, { headers: authHeader() });

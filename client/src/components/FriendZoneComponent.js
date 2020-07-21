@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Segment, Button } from "semantic-ui-react";
 
+import Card from "./Card";
+
 import { UserContext } from "../context/UserContext";
 import UserService from "../services/user.service";
 
@@ -36,12 +38,13 @@ const FriendZoneComponent = (props) => {
 
     UserService.update(currentUser.id, data)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
+        console.log("Updating location...");
       })
       .catch((e) => {
         console.log(e);
       });
-    console.log(userLocation);
+    // console.log(userLocation);
   }, [userLocation]);
 
   return (
@@ -49,7 +52,7 @@ const FriendZoneComponent = (props) => {
       <p>Current latitude: {userLocation.latitude}</p>
       <p>Current longitude: {userLocation.longitude}</p>
       <Segment style={{ overflow: "auto", maxHeight: 600 }}>
-        <p>get users from the database and display them here</p>
+        <Card />
       </Segment>
     </div>
   );

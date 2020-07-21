@@ -146,8 +146,8 @@ const SignupForm = (props) => {
       firstName: user.firstName,
       lastName: user.lastName,
       password: user.password,
-      latitude: props.coords.latitude,
-      longitude: props.coords.longitude,
+      latitude: user.latitude,
+      longitude: user.longitude,
     };
 
     const isValid = validate(
