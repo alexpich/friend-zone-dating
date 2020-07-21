@@ -15,11 +15,11 @@ module.exports = (app) => {
 
   app.use("/api/user", router);
 
-  // Retrieve all User
-  // router.get("/", users.findAll);
+  // Retrieve all Users
+  router.get("/", users.findAll);
 
   // Retrieve Twenty users nearby
-  router.get("/", users.findTwentyUsers);
+  router.get("/twenty", users.findTwentyUsers);
 
   // Retrieve a single User with id
   router.get("/:id", users.findOne);

@@ -12,13 +12,12 @@ class UserService {
   // }
 
   getTwentyUsers() {
-    return axios.get(API_URL);
+    return axios.get(API_URL + "twenty");
   }
 
-  // get(id) {
-  //   // return http.get(`/users/${id}`);
-  //   return axios.get(`/users/${id}`);
-  // }
+  getOne(id) {
+    return axios.get(API_URL + id);
+  }
 
   update(id, data) {
     return axios.put(API_URL + id, data, { headers: authHeader() });

@@ -20,9 +20,9 @@ exports.findAll = (req, res) => {
 
 // Retrieve 15 users from the database where the location is within a certain amount
 exports.findTwentyUsers = (req, res) => {
-  // User.findAll({ where: condition }, { limit: 2 })
+  // TODO: Only display users within current user's search radius.
   User.scope("withoutPassword")
-    .findAll({ limit: 2 })
+    .findAll({ limit: 20 })
     .then((data) => {
       res.send(data);
     })
@@ -37,7 +37,8 @@ exports.findTwentyUsers = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  User.findByPk(id)
+  User.scope("withoutPassword")
+    .findByPk(id)
     .then((data) => {
       res.send(data);
     })
