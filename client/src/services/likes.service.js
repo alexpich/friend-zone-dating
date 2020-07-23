@@ -10,8 +10,8 @@ class LikesService {
   //   return axios.get(API_URL);
   // }
 
-  create(data) {
-    return axios.post(API_URL, data);
+  create(otherUserId, liked, userId) {
+    return axios.post(API_URL, { otherUserId, liked, userId });
   }
 }
 

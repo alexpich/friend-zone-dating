@@ -25,7 +25,10 @@ exports.findTwentyUsersNearby = (req, res) => {
   User.scope("withoutPassword")
     .findAll({
       limit: 20,
-      include: [{ model: db.image, required: false }],
+      include: [
+        { model: db.image, required: false },
+        { model: db.like, required: false },
+      ],
     })
     .then((data) => {
       res.json(data);

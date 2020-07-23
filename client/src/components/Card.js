@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-
-// import "keen-slider/keen-slider.min.css";
-// import { useKeenSlider } from "keen-slider/react";
+import { Button, Grid, Segment, Container } from "semantic-ui-react";
 
 import { UserContext } from "../context/UserContext";
 import UserService from "../services/user.service";
@@ -11,8 +9,6 @@ import LikesService from "../services/likes.service";
 import Slider from "../components/Slider";
 
 const PhotosContainer = styled.div`
-  /* display: flex; */
-  /* flex-direction: column; */
   img {
     object-fit: cover;
     width: 100%;
@@ -20,22 +16,33 @@ const PhotosContainer = styled.div`
   }
 `;
 
-const Card = (props) => {
-  // const [sliderRef, slider] = useKeenSlider();
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
+const Card = (props) => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const [profile, setProfile] = useState([]);
   const [images, setImages] = useState([]);
 
-  const pass = (id, otherId) => {
+  const pass = () => {
     // post a Like value of 0 for pass
-    LikesService.create(currentUser.id);
+    console.log("cuid:" + currentUser.id);
+    console.log("ouid:" + profile[0].id);
+    // LikesService.create(currentUser.id, profile[0].id, 0);
+    LikesService.create(profile[0].id, 0, currentUser.id);
   };
 
   const like = () => {
     // post a Like value of 1 for like
-    LikesService.create(currentUser.id);
+    LikesService.create(profile[0].id, 1, currentUser.id);
+  };
+
+  const superLike = () => {
+    // post a Like value of 1 for like
+    LikesService.create(profile[0].id, 2, currentUser.id);
   };
 
   // TODO: get 20 profiles nearby, save it into a state(array) and then whenever passed/liked then pop it off the array
@@ -97,16 +104,20 @@ const Card = (props) => {
         </PhotosContainer>
       </div>
       {profile.length ? (
-        <p className="name">
-          {profile[0].firstName}, <span>Age</span>
-        </p>
+        <>
+          <h2 className="name">
+            {profile[0].firstName}, <span>Age</span>
+          </h2>
+          {/* <p>{profile[0].about}</p> */}
+        </>
       ) : (
         ""
       )}
-      <div>
-        <button onClick={pass}>PASS</button>
-        <button onClick={like}>LIKE</button>
-      </div>
+      <ButtonContainer>
+        <Button onClick={pass} icon="x" />
+        <Button onClick={like} icon="heart" />
+        <Button onClick={superLike} icon="star" />
+      </ButtonContainer>
     </>
   );
 };
