@@ -23,9 +23,12 @@ exports.findAll = (req, res) => {
 exports.findTwentyUsersNearby = (req, res) => {
   // TODO: Only display users within current user's search radius.
   User.scope("withoutPassword")
-    .findAll({ where: condition }, { limit: 20 })
+    .findAll({
+      limit: 20,
+      include: [{ model: db.image, required: false }],
+    })
     .then((data) => {
-      res.send(data);
+      res.json(data);
     })
     .catch((err) => {
       res.status(500).send({
@@ -38,8 +41,10 @@ exports.findTwentyUsersNearby = (req, res) => {
 // TODO: filter by search distance
 exports.findOneNearby = (req, res) => {
   User.scope("withoutPassword")
-    // .findAll({ where: condition }, { limit: 1 })
-    .findAll({ limit: 1, include: [{ model: db.image, required: false }] })
+    .findAll({
+      limit: 2,
+      include: [{ model: db.image, required: false }],
+    })
     .then((data) => {
       res.json(data);
     })

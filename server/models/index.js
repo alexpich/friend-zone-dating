@@ -33,6 +33,9 @@ db.userDetails = require("../models/userDetails.model.js")(
 db.image.belongsTo(db.user);
 db.user.hasMany(db.image);
 
+db.like.belongsTo(db.user);
+db.user.hasMany(db.like);
+
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
