@@ -19,7 +19,10 @@ module.exports = (app) => {
   router.get("/", users.findAll);
 
   // Retrieve Twenty users nearby
-  router.get("/twenty", users.findTwentyUsers);
+  router.get("/twenty", users.findTwentyUsersNearby);
+
+  // Retrieve One user nearby
+  router.get("/one", users.findOneNearby);
 
   // Retrieve a single User with id
   router.get("/:id", users.findOne);

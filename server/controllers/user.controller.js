@@ -18,8 +18,9 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Retrieve 15 users from the database where the location is within a certain amount
-exports.findTwentyUsers = (req, res) => {
+// Retrieve 20 users from the database where the location is within a certain amount
+// TODO: filter by search distance
+exports.findTwentyUsersNearby = (req, res) => {
   // TODO: Only display users within current user's search radius.
   User.scope("withoutPassword")
     .findAll({ where: condition }, { limit: 20 })
@@ -29,6 +30,22 @@ exports.findTwentyUsers = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving users.",
+      });
+    });
+};
+
+// Find a single User with an id within a search radius
+// TODO: filter by search distance
+exports.findOneNearby = (req, res) => {
+  User.scope("withoutPassword")
+    // .findAll({ where: condition }, { limit: 1 })
+    .findAll({ limit: 1, include: [{ model: db.image, required: false }] })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "There was an error retrieving a nearby user",
       });
     });
 };

@@ -62,7 +62,6 @@ const SigninForm = () => {
           .then((res) => {
             // setLoading(true);
             const response = res.data[0];
-            const id = response.id;
             console.log(response); // setDetailsId(id);
             // console.log(detailsId);
           })
