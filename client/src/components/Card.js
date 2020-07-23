@@ -89,7 +89,7 @@ const Card = (props) => {
   // Get the images of the first profile
   useEffect(() => {
     if (profile.length) {
-      // console.log(profile);
+      console.log(profile);
       if (images.length) {
         console.log(images);
       }

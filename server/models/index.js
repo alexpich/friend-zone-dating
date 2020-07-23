@@ -41,12 +41,15 @@ db.role.belongsToMany(db.user, {
   foreignKey: "roleId",
   otherKey: "userId",
 });
+
 db.user.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
   otherKey: "roleId",
 });
+
 db.userDetails.belongsTo(db.user);
+db.user.hasOne(db.userDetails);
 
 // Roles
 db.ROLES = ["user", "admin"];
