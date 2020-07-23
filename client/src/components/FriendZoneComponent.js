@@ -10,6 +10,7 @@ const FriendZoneComponent = (props) => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
+  
   const initialState = {
     latitude: null,
     longitude: null,
@@ -17,7 +18,6 @@ const FriendZoneComponent = (props) => {
 
   const [userLocation, setUserLocation] = useState(initialState);
 
-  // console.log(userLocation);
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
       setUserLocation({
