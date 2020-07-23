@@ -16,11 +16,7 @@ const FriendZone = () => {
           <SidebarNav />
         </Grid.Column>
         <Grid.Column>
-          {/* {!loading && currentUser.id === detailsId ? ( */}
           <FriendZoneComponent />
-          {/* ) : ( */}
-          {/* <CreateUserDetailsForm /> */}
-          {/* )} */}
         </Grid.Column>
       </Grid>
     </div>

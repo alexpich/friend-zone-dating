@@ -19,6 +19,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+// Models
 db.image = require("../models/image.model.js")(sequelize, Sequelize);
 db.like = require("../models/likes.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
@@ -28,22 +29,23 @@ db.userDetails = require("../models/userDetails.model.js")(
   Sequelize
 );
 
+// Relations
 db.image.belongsTo(db.user);
+db.user.hasMany(db.image);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
   otherKey: "userId",
 });
-
 db.user.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
   otherKey: "roleId",
 });
-
 db.userDetails.belongsTo(db.user);
 
+// Roles
 db.ROLES = ["user", "admin"];
 
 module.exports = db;
