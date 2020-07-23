@@ -21,7 +21,7 @@ const Nav = () => {
   };
 
   return (
-    <Menu secondary fixed="top">
+    <Menu secondary color="red" inverted>
       {userFromSession !== null ? (
         <>
           <Menu.Item name="friendzone" exact as={NavLink} to="/friendzone" />
