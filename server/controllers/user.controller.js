@@ -28,7 +28,7 @@ exports.findTwentyUsersNearby = (req, res) => {
       include: [
         { model: db.image, required: true },
         { model: db.like, required: false },
-        { model: db.userDetails, required: false },
+        // { model: db.userDetails, required: false },
       ],
     })
     .then((data) => {
