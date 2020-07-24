@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { Button, Grid, Segment, Container } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 import { UserContext } from "../context/UserContext";
 import UserService from "../services/user.service";
@@ -29,6 +29,22 @@ const Card = (props) => {
   const [likedUsers, setLikedUsers] = useState([]);
   const [images, setImages] = useState([]);
 
+  const setNextProfile = () => {
+    let newProfilesArr = [...profiles];
+    newProfilesArr.splice(0, 1);
+    setProfiles(newProfilesArr);
+    setProfile(newProfilesArr[0]);
+
+    console.log(profile);
+    let imgArr = [];
+    if (profile) {
+      for (let i = 0; i < profile.images.length; i++) {
+        imgArr.push(profile.images[i].url);
+      }
+    }
+    setImages(imgArr);
+  };
+
   const pass = () => {
     // post a Like value of 0 for pass, set a state and rerender
     console.log("cuid:" + currentUser.id);
@@ -36,9 +52,7 @@ const Card = (props) => {
     console.log("Passed!");
     LikesService.create(profiles[0].id, 0, currentUser.id);
 
-    let newProfilesArr = [...profiles];
-    newProfilesArr.splice(0, 1);
-    setProfiles(newProfilesArr);
+    setNextProfile();
   };
 
   const like = () => {
@@ -48,9 +62,7 @@ const Card = (props) => {
     console.log("Liked!");
     LikesService.create(profiles[0].id, 1, currentUser.id);
 
-    let newProfilesArr = [...profiles];
-    newProfilesArr.splice(0, 1);
-    setProfiles(newProfilesArr);
+    setNextProfile();
   };
 
   const superLike = () => {
@@ -60,20 +72,22 @@ const Card = (props) => {
     console.log("Superliked!");
     LikesService.create(profiles[0].id, 2, currentUser.id);
 
-    let newProfilesArr = [...profiles];
-    newProfilesArr.splice(0, 1);
-    setProfiles(newProfilesArr);
+    setNextProfile();
   };
 
   // TODO: get 20 profiles nearby, save it into a state(array) and then whenever passed/liked then pop it off the array
 
   // Get the nearby profiles
   useEffect(() => {
-    UserService.getTwentyUsersNearby()
+    UserService.getTwentyUsersNearby(currentUser.id)
       .then((res) => {
         // Filter and remove the current user
-        let nearbyUsers = res.data.filter((p) => p.id !== currentUser.id);
-        setProfiles(nearbyUsers);
+        // let nearbyUsers = res.data.filter((p) => p.id !== currentUser.id);
+        // setProfiles(nearbyUsers);
+        let nearbyUsers = res.data;
+        console.log(nearbyUsers);
+        // setProfile(nearbyUsers);
+        // console.log(profile);
 
         // Get all the Liked/Passed users from the currentUser
         LikesService.getAllFromUser(currentUser.id)
@@ -119,7 +133,6 @@ const Card = (props) => {
         setProfile(temp[0]);
         // if (images.length) {
         let imgArr = [];
-        //   console.log(profiles[0]);
         if (profile) {
           for (let i = 0; i < profile.images.length; i++) {
             imgArr.push(profile.images[i].url);
@@ -127,9 +140,6 @@ const Card = (props) => {
         }
         setImages(imgArr);
         // }
-        // console.log(temp[0]);
-
-        console.log(profile);
       }
     }
   }, [profiles, likedUsers, profile]);

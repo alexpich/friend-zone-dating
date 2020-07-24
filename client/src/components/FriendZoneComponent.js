@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Segment, Button } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 
 import Card from "./Card";
 
@@ -10,7 +10,7 @@ const FriendZoneComponent = (props) => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
-  
+
   const initialState = {
     latitude: null,
     longitude: null,

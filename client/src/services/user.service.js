@@ -10,8 +10,8 @@ class UserService {
   //   return axios.get(API_URL);
   // }
 
-  getTwentyUsersNearby() {
-    return axios.get(API_URL + "twenty");
+  getTwentyUsersNearby(id) {
+    return axios.get(API_URL + "twenty/" + id);
   }
 
   getOneNearby() {

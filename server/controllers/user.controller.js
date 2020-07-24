@@ -21,9 +21,20 @@ exports.findAll = (req, res) => {
 // Retrieve 20 users from the database where the location is within a certain amount
 // TODO: filter by search distance
 exports.findTwentyUsersNearby = (req, res) => {
+  // console.log("\n\n\n\n" + JSON.stringify(req.params) + "\n\n\n\n");
+  console.log("\n\n\n\n" + req.params.id + "\n\n\n\n");
+  // console.log(req.params.id);
+
+  let currentUserId = req.params.id;
+
   // TODO: Only display users within current user's search radius.
   User.scope("withoutPassword")
     .findAll({
+      where: {
+        id: {
+          [Op.not]: currentUserId,
+        },
+      },
       limit: 20,
       include: [
         { model: db.image, required: true },
