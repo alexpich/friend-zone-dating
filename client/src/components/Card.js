@@ -69,22 +69,6 @@ const Card = (props) => {
 
   // Get the nearby profiles
   useEffect(() => {
-    // UserService.getOneNearby()
-    //   .then((res) => {
-    //     let newRes = res.data.filter(
-    //       (profiles) => profiles.id !== currentUser.id
-    //     );
-    //     setProfiles(newRes);
-
-    //     for (let i = 0; i < newRes[0].images.length; i++) {
-    //       // setImages(() => newRes[0].images[i].url);
-    //       setImages((images) => [...images, newRes[0].images[i].url]);
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-
     UserService.getTwentyUsersNearby()
       .then((res) => {
         // Filter and remove the current user
@@ -97,18 +81,6 @@ const Card = (props) => {
             // For each user that is liked, remove it from the state(array)
             let response = res.data;
             setLikedUsers(response);
-
-            // let temp = profiles;
-            // for (let i = 0; i < likedUsers.length; i++) {
-            //   for (let j = 0; j < profiles.length; j++) {
-            //     if (likedUsers[i].otherUserId === profiles[j].id) {
-            //       // Remove the profile if currentUser has already seen this person
-            //       temp.splice(profiles[j], 1);
-            //     }
-            //   }
-            // }
-            // console.log(temp);
-            // setProfiles(temp);
           })
           .catch((e) => {
             console.log(e);
@@ -134,8 +106,6 @@ const Card = (props) => {
 
       //  This is causing an infinite loop for some reason
       if (likedUsers.length) {
-        // console.log(likedUsers);
-        // console.log(likedUsers[0].otherUserId);
         let temp = profiles;
         for (let i = 0; i < likedUsers.length; i++) {
           for (let j = 0; j < profiles.length; j++) {
@@ -145,30 +115,24 @@ const Card = (props) => {
             }
           }
         }
-        // console.log(temp);
         setProfiles(temp);
         setProfile(temp[0]);
-        if (images.length) {
-          let imgArr = [];
-          for (let i = 0; i < profiles[0].images.length; i++) {
-            imgArr.push(profiles[0].images[i].url);
+        // if (images.length) {
+        let imgArr = [];
+        //   console.log(profiles[0]);
+        if (profile) {
+          for (let i = 0; i < profile.images.length; i++) {
+            imgArr.push(profile.images[i].url);
           }
-          setImages(imgArr);
         }
-        console.log(temp[0]);
+        setImages(imgArr);
+        // }
+        // console.log(temp[0]);
+
+        console.log(profile);
       }
     }
   }, [profiles, likedUsers, profile]);
-
-  useEffect(() => {
-    // if (images.length) {
-    //   let imgArr = [];
-    //   for (let i = 0; i < profiles[0].images.length; i++) {
-    //     imgArr.push(profiles[0].images[i].url);
-    //   }
-    //   setImages(imgArr);
-    // }
-  }, [images, profiles]);
 
   return (
     <>
