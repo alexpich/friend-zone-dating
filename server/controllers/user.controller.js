@@ -22,11 +22,8 @@ exports.findAll = (req, res) => {
 };
 
 // Retrieve 20 users from the database where the location is within a certain amount
-// TODO: filter by search distance
 exports.findTwentyUsersNearby = (req, res) => {
   let currentUserId = req.params.id;
-
-  // let filteredUsers =
 
   // TODO: Only display users within current user's search radius.
   // Get all the users (w/ images and likes) and then only display the ones that havent been liked by currentUser
