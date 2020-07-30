@@ -1,6 +1,9 @@
 const db = require("../models");
+const { Sequelize } = require("sequelize");
 const User = db.user;
-const Op = db.Sequelize.Op;
+const Likes = db.like;
+// const Op = db.Sequelize.Op;
+const { Op } = require("sequelize");
 
 // Retrieve all user from the database.
 exports.findAll = (req, res) => {
@@ -21,26 +24,63 @@ exports.findAll = (req, res) => {
 // Retrieve 20 users from the database where the location is within a certain amount
 // TODO: filter by search distance
 exports.findTwentyUsersNearby = (req, res) => {
-  // console.log("\n\n\n\n" + JSON.stringify(req.params) + "\n\n\n\n");
-  console.log("\n\n\n\n" + req.params.id + "\n\n\n\n");
-  // console.log(req.params.id);
-
   let currentUserId = req.params.id;
 
+  // let filteredUsers =
+
   // TODO: Only display users within current user's search radius.
-  User.scope("withoutPassword")
+  // Get all the users (w/ images and likes) and then only display the ones that havent been liked by currentUser
+  const users = User.scope("withoutPassword")
     .findAll({
-      where: {
-        id: {
-          [Op.not]: currentUserId,
-        },
-      },
-      limit: 20,
       include: [
         { model: db.image, required: true },
-        { model: db.like, required: false },
+        {
+          model: db.like,
+          required: false,
+        },
         // { model: db.userDetails, required: false },
       ],
+      where: {
+        id: {
+          [Op.ne]: currentUserId,
+          [Op.not]: [
+            Sequelize.literal(
+              "(SELECT likes.otherUserId from likes where likes.userId = " +
+                currentUserId +
+                ")"
+            ),
+          ],
+
+          // [Op.and]: [
+          // get the users by id thats not in (likes where the like's userid is the currentuserid)
+          // Sequelize.literal(
+          //   "(users.id IN (SELECT likes.otherUserId FROM likes WHERE NOT EXISTS likes.userId=" +
+          //     currentUserId +
+          //     "))"
+          // ),
+          // Sequelize.where(Sequelize.col("Likes.liked"), "IS", null),
+          // ],
+        },
+        // [Op.ne]: [
+        //   Sequelize.literal(
+        //     "users.id IN (SELECT likes.userId from likes where likes.userId = " +
+        //       currentUserId +
+        //       ")"
+        //   ),
+        // ],
+        //       // [Op.and]: [
+        //       //   Sequelize.literal(
+        //       //     // "SELECT * FROM likes"
+        //       //     "users.id NOT IN (SELECT L.id FROM likes L WHERE L.userId=" +
+        //       //       currentUserId +
+        //       //       ")"
+        //       //     // currentUserId + "NOT IN likes"
+        //       //     // "SELECT * FROM likes where id not in likes"
+        //       //   ),
+        //       // ],
+      },
+      required: false,
+      // limit: 20,
     })
     .then((data) => {
       res.json(data);
@@ -50,6 +90,30 @@ exports.findTwentyUsersNearby = (req, res) => {
         message: err.message || "Some error occurred while retrieving users.",
       });
     });
+
+  // const filteredUsers = users.filter((user) => user.likes.length === 0);
+
+  // const likes = Likes.findAll({
+  //   attributes: ["userId"],
+  //   group: ["userId"],
+  // });
+
+  // const userIds = likes.map((like) => like.userId);
+  // console.log(userIds);
+
+  // const filteredUsers = User.findAll({
+  //   where: {
+  //     id: { [Op.notIn]: userIds },
+  //   },
+  // })
+  //   .then((data) => {
+  //     res.json(data);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send({
+  //       message: err.message || "Some error occurred while retrieving users.",
+  //     });
+  //   });
 };
 
 // Find a single User with an id within a search radius

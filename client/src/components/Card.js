@@ -22,7 +22,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Card = (props) => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const [profiles, setProfiles] = useState([]);
   const [profile, setProfile] = useState(null);
@@ -48,9 +48,9 @@ const Card = (props) => {
   const pass = () => {
     // post a Like value of 0 for pass, set a state and rerender
     console.log("cuid:" + currentUser.id);
-    console.log("ouid:" + profiles[0].id);
+    console.log("ouid:" + profile.id);
     console.log("Passed!");
-    LikesService.create(profiles[0].id, 0, currentUser.id);
+    LikesService.create(profile.id, 0, currentUser.id);
 
     setNextProfile();
   };
@@ -58,9 +58,9 @@ const Card = (props) => {
   const like = () => {
     // post a Like value of 1 for like, set a state and rerender
     console.log("cuid:" + currentUser.id);
-    console.log("ouid:" + profiles[0].id);
+    console.log("ouid:" + profile.id);
     console.log("Liked!");
-    LikesService.create(profiles[0].id, 1, currentUser.id);
+    LikesService.create(profile.id, 1, currentUser.id);
 
     setNextProfile();
   };
@@ -68,9 +68,9 @@ const Card = (props) => {
   const superLike = () => {
     // post a Like value of 1 for like, set a state and rerender
     console.log("cuid:" + currentUser.id);
-    console.log("ouid:" + profiles[0].id);
+    console.log("ouid:" + profile.id);
     console.log("Superliked!");
-    LikesService.create(profiles[0].id, 2, currentUser.id);
+    LikesService.create(profile.id, 2, currentUser.id);
 
     setNextProfile();
   };
@@ -81,13 +81,9 @@ const Card = (props) => {
   useEffect(() => {
     UserService.getTwentyUsersNearby(currentUser.id)
       .then((res) => {
-        // Filter and remove the current user
-        // let nearbyUsers = res.data.filter((p) => p.id !== currentUser.id);
-        // setProfiles(nearbyUsers);
         let nearbyUsers = res.data;
-        console.log(nearbyUsers);
-        // setProfile(nearbyUsers);
-        // console.log(profile);
+        setProfiles(nearbyUsers);
+        setProfile(nearbyUsers[0]);
 
         // Get all the Liked/Passed users from the currentUser
         LikesService.getAllFromUser(currentUser.id)
@@ -116,33 +112,44 @@ const Card = (props) => {
   useEffect(() => {
     if (profiles.length) {
       // console.log(currentUser);
-      // console.log(profiles);
+      console.log(profiles);
 
       //  This is causing an infinite loop for some reason
-      if (likedUsers.length) {
-        let temp = profiles;
-        for (let i = 0; i < likedUsers.length; i++) {
-          for (let j = 0; j < profiles.length; j++) {
-            if (likedUsers[i].otherUserId === profiles[j].id) {
-              // Remove the profile if currentUser has already seen this person
-              temp.splice(profiles[j], 1);
-            }
-          }
-        }
-        setProfiles(temp);
-        setProfile(temp[0]);
-        // if (images.length) {
-        let imgArr = [];
-        if (profile) {
-          for (let i = 0; i < profile.images.length; i++) {
-            imgArr.push(profile.images[i].url);
-          }
-        }
-        setImages(imgArr);
-        // }
-      }
+      // if (likedUsers.length) {
+      //   let temp = profiles;
+      //   for (let i = 0; i < likedUsers.length; i++) {
+      //     for (let j = 0; j < profiles.length; j++) {
+      //       if (likedUsers[i].otherUserId === profiles[j].id) {
+      //         // Remove the profile if currentUser has already seen this person
+      //         temp.splice(profiles[j], 1);
+      //       }
+      //     }
+      //   }
+      //   setProfiles(temp);
+      //   setProfile(temp[0]);
+      // if (images.length) {
+      // let imgArr = [];
+      // if (profile) {
+      //   for (let i = 0; i < profile.images.length; i++) {
+      //     imgArr.push(profile.images[i].url);
+      //   }
+      // }
+      // setImages(imgArr);
+      // }
+      // }
     }
   }, [profiles, likedUsers, profile]);
+
+  useEffect(() => {
+    // let imgArr = [];
+    // if (profile) {
+    //   for (let i = 0; i < profile.images.length; i++) {
+    //     imgArr.push(profile.images[i].url);
+    //   }
+    // }
+    // setImages(imgArr);
+    // setNextProfile();
+  }, []);
 
   return (
     <>
@@ -164,9 +171,9 @@ const Card = (props) => {
         ""
       )}
       <ButtonContainer>
-        <Button onClick={pass} icon="x" />
-        <Button onClick={like} icon="heart" />
-        <Button onClick={superLike} icon="star" />
+        <Button onClick={pass} color="red" inverted icon="x" />
+        <Button onClick={like} color="green" inverted icon="heart" />
+        <Button onClick={superLike} color="blue" inverted icon="star" />
       </ButtonContainer>
     </>
   );
