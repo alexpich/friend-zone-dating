@@ -35,18 +35,23 @@ db.user.hasMany(db.image);
 
 db.like.belongsTo(db.user);
 db.user.hasMany(db.like);
+// db.like.belongsTo(db.user, { as: "Likes" });
+// db.user.hasMany(db.like, { as: "Likes" });
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
   otherKey: "userId",
 });
+
 db.user.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
   otherKey: "roleId",
 });
+
 db.userDetails.belongsTo(db.user);
+db.user.hasOne(db.userDetails);
 
 // Roles
 db.ROLES = ["user", "admin"];

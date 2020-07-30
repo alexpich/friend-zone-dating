@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Button, Form, Segment } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 
 import ImageService from "../services/image.service";
 import { UserContext } from "../context/UserContext";

@@ -1,4 +1,3 @@
-import http from "../http-common";
 import axios from "axios";
 import authHeader from "./auth-header";
 
@@ -11,8 +10,8 @@ class UserService {
   //   return axios.get(API_URL);
   // }
 
-  getTwentyUsersNearby() {
-    return axios.get(API_URL + "twenty");
+  getTwentyUsersNearby(id) {
+    return axios.get(API_URL + "twenty/" + id);
   }
 
   getOneNearby() {

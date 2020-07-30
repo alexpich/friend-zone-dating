@@ -4,13 +4,11 @@ const Op = db.Sequelize.Op;
 
 // Create and post the "like/dislike" to the DB
 exports.create = (req, res) => {
-  const like = {
-    userId: req.body.userId,
+  Likes.create({
     otherUserId: req.body.otherUserId,
     liked: req.body.liked,
-  };
-
-  Likes.create(like)
+    userId: req.body.userId,
+  })
     .then((data) => {
       console.log(data);
       res.send(data);

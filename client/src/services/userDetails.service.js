@@ -9,7 +9,7 @@ class UserDetailsService {
   }
 
   create(data) {
-    return axios.post(API_URL, data, { headers: authHeader() });
+    return axios.post(API_URL, data);
   }
 
   update(id, data) {

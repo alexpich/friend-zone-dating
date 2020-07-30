@@ -18,20 +18,20 @@ export default (props) => {
           <div className="keen-slider__slide number-slide1">
             <img src={props.images[0]} alt="default" />
           </div>
-          {props.images[1] && props.images[2] ? (
-            <>
-              <div className="keen-slider__slide number-slide2">
-                <img src={props.images[1]} alt="second" />
-              </div>
-              <div className="keen-slider__slide number-slide3">
-                <img src={props.images[2]} alt="third" />
-              </div>
-            </>
+          {/* {props.images[1] && props.images[2] ? (
+            <> */}
+          <div className="keen-slider__slide number-slide2">
+            <img src={props.images[1]} alt="second" />
+          </div>
+          <div className="keen-slider__slide number-slide3">
+            <img src={props.images[2]} alt="third" />
+          </div>
+          {/* </>
           ) : (
             <div className="keen-slider__slide number-slide2">
               <img src={props.images[1]} alt="second" />
             </div>
-          )}
+          )} */}
         </div>
         {slider && (
           <>

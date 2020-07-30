@@ -24,5 +24,5 @@ module.exports = (app) => {
   // Update a Like with userId
   router.put("/:id", likes.update);
 
-  app.use("/api/friendzone", router);
+  app.use("/api/likes", router);
 };
