@@ -50,37 +50,10 @@ exports.findTwentyUsersNearby = (req, res) => {
                 ")"
             ),
           ],
-
-          // [Op.and]: [
-          // get the users by id thats not in (likes where the like's userid is the currentuserid)
-          // Sequelize.literal(
-          //   "(users.id IN (SELECT likes.otherUserId FROM likes WHERE NOT EXISTS likes.userId=" +
-          //     currentUserId +
-          //     "))"
-          // ),
-          // Sequelize.where(Sequelize.col("Likes.liked"), "IS", null),
-          // ],
         },
-        // [Op.ne]: [
-        //   Sequelize.literal(
-        //     "users.id IN (SELECT likes.userId from likes where likes.userId = " +
-        //       currentUserId +
-        //       ")"
-        //   ),
-        // ],
-        //       // [Op.and]: [
-        //       //   Sequelize.literal(
-        //       //     // "SELECT * FROM likes"
-        //       //     "users.id NOT IN (SELECT L.id FROM likes L WHERE L.userId=" +
-        //       //       currentUserId +
-        //       //       ")"
-        //       //     // currentUserId + "NOT IN likes"
-        //       //     // "SELECT * FROM likes where id not in likes"
-        //       //   ),
-        //       // ],
       },
       required: false,
-      // limit: 20,
+      limit: 20,
     })
     .then((data) => {
       res.json(data);
@@ -90,30 +63,6 @@ exports.findTwentyUsersNearby = (req, res) => {
         message: err.message || "Some error occurred while retrieving users.",
       });
     });
-
-  // const filteredUsers = users.filter((user) => user.likes.length === 0);
-
-  // const likes = Likes.findAll({
-  //   attributes: ["userId"],
-  //   group: ["userId"],
-  // });
-
-  // const userIds = likes.map((like) => like.userId);
-  // console.log(userIds);
-
-  // const filteredUsers = User.findAll({
-  //   where: {
-  //     id: { [Op.notIn]: userIds },
-  //   },
-  // })
-  //   .then((data) => {
-  //     res.json(data);
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send({
-  //       message: err.message || "Some error occurred while retrieving users.",
-  //     });
-  //   });
 };
 
 // Find a single User with an id within a search radius
