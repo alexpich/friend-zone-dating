@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import { Button, Grid } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 
 import SignUpButton from "./styles/SignUpButton";
 import HomeBg from "../assets/home-bg.jpg";

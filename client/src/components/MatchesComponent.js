@@ -1,10 +1,12 @@
 import React from "react";
+import { Segment } from "semantic-ui-react";
 
 const MatchesComponent = () => {
   return (
     <div>
-      <h1>MatchesComponent</h1>
-      <p>Display matches in a 3-4 column grid pattern</p>
+      <Segment style={{ overflow: "auto", maxHeight: 600 }}>
+        <p>Matches</p>
+      </Segment>
     </div>
   );
 };

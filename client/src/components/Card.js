@@ -67,10 +67,12 @@ const Card = (props) => {
 
         // Get and set the images of the first profile
         let imgArr = [];
-        for (let i = 0; i < nearbyUsers[0].images.length; i++) {
-          imgArr.push(nearbyUsers[0].images[i].url);
+        if (nearbyUsers[0]) {
+          for (let i = 0; i < nearbyUsers[0].images.length; i++) {
+            imgArr.push(nearbyUsers[0].images[i].url);
+          }
+          setImages(imgArr);
         }
-        setImages(imgArr);
       })
       .catch((e) => {
         console.log(e);

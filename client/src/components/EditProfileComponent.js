@@ -67,7 +67,7 @@ const UploadImage3 = styled.div`
 
 const EditProfileComponent = (props) => {
   // Current user
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   //   Loading state
   const [isLoading, setIsLoading] = useState(false);

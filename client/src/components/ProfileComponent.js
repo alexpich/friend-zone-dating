@@ -25,7 +25,7 @@ const PhotosContainer = styled.div`
 `;
 
 const ProfileComponent = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const [imageOne, setImageOne] = useState(null);
   const [imageTwo, setImageTwo] = useState(null);
