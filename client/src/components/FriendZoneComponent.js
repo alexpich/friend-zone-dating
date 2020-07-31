@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 import UserService from "../services/user.service";
 
 const FriendZoneComponent = (props) => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
 
@@ -19,11 +19,13 @@ const FriendZoneComponent = (props) => {
   const [userLocation, setUserLocation] = useState(initialState);
 
   useEffect(() => {
+    setLoading(true);
     navigator.geolocation.getCurrentPosition(function (position) {
       setUserLocation({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       });
+      setLoading(false);
     });
   }, []);
 
@@ -41,12 +43,18 @@ const FriendZoneComponent = (props) => {
       .catch((e) => {
         console.log(e);
       });
-  }, [userLocation]);
+  }, [userLocation, currentUser.id]);
 
   return (
     <div>
-      <p>Current latitude: {userLocation.latitude}</p>
-      <p>Current longitude: {userLocation.longitude}</p>
+      {loading ? (
+        "Loading..."
+      ) : (
+        <>
+          <p>Current latitude: {userLocation.latitude}</p>
+          <p>Current longitude: {userLocation.longitude}</p>
+        </>
+      )}
       <Segment style={{ overflow: "auto", maxHeight: 600 }}>
         <Card />
       </Segment>

@@ -11,6 +11,9 @@ import {
   Segment,
 } from "semantic-ui-react";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import AuthService from "../services/auth.service";
 
 const PwCaption = styled.p`
@@ -30,6 +33,7 @@ const SignupForm = (props) => {
     latitude: null,
     longitude: null,
   };
+  const [birthdate, setBirthdate] = useState(new Date());
 
   const initialErrorState = {
     error: false,
@@ -68,6 +72,10 @@ const SignupForm = (props) => {
     });
   };
 
+  const handleBirthdateChange = (e) => {
+    setBirthdate(e);
+    console.log(e);
+  };
   // Returns true if valid email
   function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -164,6 +172,7 @@ const SignupForm = (props) => {
         data.firstName,
         data.lastName,
         data.password,
+        birthdate,
         data.latitude,
         data.longitude
       )
@@ -173,6 +182,7 @@ const SignupForm = (props) => {
             firstName: data.firstName,
             lastName: data.lastName,
             password: data.password,
+            date: data.date,
             latitude: data.latitude,
             longitude: data.longitutde,
           });
@@ -181,8 +191,9 @@ const SignupForm = (props) => {
 
           setSaved(true);
 
-          //  Clear Form
-          setUser(initialUserState);
+          //  Dont Clear Form
+          // setUser(initialUserState);
+          
           setError(false);
           setEmailError(false);
           setFirstNameError(false);
@@ -288,6 +299,9 @@ const SignupForm = (props) => {
             ) : (
               ""
             )}
+
+            <DatePicker selected={birthdate} onChange={handleBirthdateChange} />
+
             {/* Profile Photo */}
 
             <Button

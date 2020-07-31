@@ -22,11 +22,8 @@ exports.findAll = (req, res) => {
 };
 
 // Retrieve 20 users from the database where the location is within a certain amount
-// TODO: filter by search distance
 exports.findTwentyUsersNearby = (req, res) => {
   let currentUserId = req.params.id;
-
-  // let filteredUsers =
 
   // TODO: Only display users within current user's search radius.
   // Get all the users (w/ images and likes) and then only display the ones that havent been liked by currentUser
@@ -50,37 +47,10 @@ exports.findTwentyUsersNearby = (req, res) => {
                 ")"
             ),
           ],
-
-          // [Op.and]: [
-          // get the users by id thats not in (likes where the like's userid is the currentuserid)
-          // Sequelize.literal(
-          //   "(users.id IN (SELECT likes.otherUserId FROM likes WHERE NOT EXISTS likes.userId=" +
-          //     currentUserId +
-          //     "))"
-          // ),
-          // Sequelize.where(Sequelize.col("Likes.liked"), "IS", null),
-          // ],
         },
-        // [Op.ne]: [
-        //   Sequelize.literal(
-        //     "users.id IN (SELECT likes.userId from likes where likes.userId = " +
-        //       currentUserId +
-        //       ")"
-        //   ),
-        // ],
-        //       // [Op.and]: [
-        //       //   Sequelize.literal(
-        //       //     // "SELECT * FROM likes"
-        //       //     "users.id NOT IN (SELECT L.id FROM likes L WHERE L.userId=" +
-        //       //       currentUserId +
-        //       //       ")"
-        //       //     // currentUserId + "NOT IN likes"
-        //       //     // "SELECT * FROM likes where id not in likes"
-        //       //   ),
-        //       // ],
       },
       required: false,
-      // limit: 20,
+      limit: 20,
     })
     .then((data) => {
       res.json(data);
@@ -90,30 +60,6 @@ exports.findTwentyUsersNearby = (req, res) => {
         message: err.message || "Some error occurred while retrieving users.",
       });
     });
-
-  // const filteredUsers = users.filter((user) => user.likes.length === 0);
-
-  // const likes = Likes.findAll({
-  //   attributes: ["userId"],
-  //   group: ["userId"],
-  // });
-
-  // const userIds = likes.map((like) => like.userId);
-  // console.log(userIds);
-
-  // const filteredUsers = User.findAll({
-  //   where: {
-  //     id: { [Op.notIn]: userIds },
-  //   },
-  // })
-  //   .then((data) => {
-  //     res.json(data);
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send({
-  //       message: err.message || "Some error occurred while retrieving users.",
-  //     });
-  //   });
 };
 
 // Find a single User with an id within a search radius
@@ -130,6 +76,71 @@ exports.findOneNearby = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: err.message || "There was an error retrieving a nearby user",
+      });
+    });
+};
+
+// Retrieve users where (userId and otherUserId) and (liked === 1 or 2)
+exports.findAllMatches = (req, res) => {
+  let currentUserId = req.params.id;
+
+  const users = User.scope("withoutPassword")
+    .findAll({
+      include: [
+        { model: db.image, required: true, attributes: [] },
+        {
+          model: db.like,
+          required: false,
+          attributes: [],
+        },
+      ],
+      where: {
+        id: {
+          [Op.ne]: currentUserId,
+          // [Op.or]: [
+          //   // A Like
+          //   Sequelize.literal(
+          //     "users.id IN (SELECT likes.otherUserId from likes where likes.liked = " +
+          //       1 +
+          //       ")"
+          //   ),
+          //   // A SuperLike
+          //   Sequelize.literal(
+          //     "users.id IN (SELECT likes.otherUserId from likes where likes.liked = " +
+          //       2 +
+          //       ")"
+          //   ),
+          // ],
+          // /*
+          [Op.and]: [
+            // OtherUser Likes you
+            // Sequelize.literal(
+            //   "users.id IN (SELECT likes.otherUserId from likes where likes.userId = " +
+            //     currentUserId +
+            //     ")"
+            // ),
+            // // You like OtherUser
+            // Sequelize.literal(
+            //   "users.id IN (SELECT likes.userId from likes where likes.otherUserId = " +
+            //     currentUserId +
+            //     ")"
+            // ),
+            Sequelize.literal(
+              "SELECT a.userId, a.otherUserId FROM likes a INNER JOIN likes b ON a.userId = b.otherUserId AND b.userId = a.otherUserId"
+            ),
+          ],
+          // */
+        },
+      },
+      required: false,
+      limit: 20,
+    })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving matches.",
       });
     });
 };
@@ -171,47 +182,6 @@ exports.update = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error updating User with id=" + id,
-      });
-    });
-};
-
-// Delete a User with the specified id in the request
-exports.delete = (req, res) => {
-  const id = req.params.id;
-
-  User.destroy({
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "User was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message: `Cannot delete User with id=${id}. Maybe User was not found!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Could not delete User with id=" + id,
-      });
-    });
-};
-
-// Delete all Users from the database.
-exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((nums) => {
-      res.send({ message: `${nums} Users were deleted successfully!` });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while removing all users.",
       });
     });
 };

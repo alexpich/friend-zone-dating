@@ -3,10 +3,6 @@ import { Grid } from "semantic-ui-react";
 
 import SidebarNav from "../components/SidebarNav";
 import FriendZoneComponent from "../components/FriendZoneComponent";
-import CreateUserDetailsForm from "../components/CreateUserDetailsForm";
-
-import { UserContext } from "../context/UserContext";
-import UserDetailsService from "../services/userDetails.service";
 
 const FriendZone = () => {
   return (

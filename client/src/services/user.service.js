@@ -5,42 +5,21 @@ import authHeader from "./auth-header";
 const API_URL = "http://localhost:5000/api/user/";
 
 class UserService {
-  // TODO: Fix these
-  // getAll() {
-  //   return axios.get(API_URL);
-  // }
-
   getTwentyUsersNearby(id) {
     return axios.get(API_URL + "twenty/" + id);
-  }
-
-  getOneNearby() {
-    return axios.get(API_URL + "one");
   }
 
   getOne(id) {
     return axios.get(API_URL + id);
   }
 
+  getMatches(id) {
+    return axios.get(API_URL + "matches/" + id);
+  }
+
   update(id, data) {
     return axios.put(API_URL + id, data, { headers: authHeader() });
   }
-
-  // delete(id) {
-  //   return axios.delete(`/users/${id}`);
-  // }
-
-  // findByEmail(email) {
-  //   return axios.get(`/users?email=${email}`);
-  // }
-
-  // findByFirstName(firstName) {
-  //   return axios.get(`/users?firstName=${firstName}`);
-  // }
-
-  // findByLastName(lastName) {
-  //   return axios.get(`/users?lastName=${lastName}`);
-  // }
 }
 
 export default new UserService();

@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
       password: {
         type: Sequelize.STRING,
       },
+      birthdate: {
+        type: Sequelize.DATEONLY,
+      },
       latitude: {
         type: Sequelize.DECIMAL(10, 7),
       },
