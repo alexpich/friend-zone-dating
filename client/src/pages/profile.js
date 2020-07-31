@@ -6,7 +6,7 @@ import ProfileComponent from "../components/ProfileComponent";
 
 const Profile = () => (
   <div className="container">
-    <Grid columns={2} stackable>
+    <Grid columns={2}>
       <Grid.Column width={4}>
         <SidebarNav />
       </Grid.Column>

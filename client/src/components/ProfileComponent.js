@@ -31,6 +31,17 @@ const ProfileComponent = () => {
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
 
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   useEffect(() => {
     if (currentUser) {
       ImageService.get(currentUser.id)
@@ -56,8 +67,8 @@ const ProfileComponent = () => {
             {imageThree ? <img src={imageThree} alt="Third" /> : ""}
           </PhotosContainer>
           <p className="name">
-            {currentUser.firstName + " " + currentUser.lastName},{" "}
-            <span>Age</span>
+            {currentUser.firstName},{" "}
+            <span>{getAge(currentUser.birthdate)}</span>
           </p>
         </Segment>
       </ProfileCard>

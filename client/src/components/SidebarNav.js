@@ -16,18 +16,13 @@ const SidebarNav = () => {
             visible
             width="thin"
           >
-            <Menu.Item as={NavLink} exact to="/friendzone" name="friendzone" />
-            <Menu.Item as={NavLink} exact to="/friendzone" name="friendzone" />
+            <Menu.Item as={NavLink} exact to="/start" name="start" />
+            <Menu.Item as={NavLink} exact to="/start" name="start" />
             <Menu.Item as={NavLink} exact to="/matches" name="matches" />
             <Menu.Item as={NavLink} exact to="/messages" name="messages" />
             <Menu.Item as={NavLink} exact to="/profile" name="profile" />
           </Sidebar>
 
-          <Sidebar.Pusher>
-            <Segment basic>
-              <p>test</p>
-            </Segment>
-          </Sidebar.Pusher>
         </Grid.Column>
       </Grid>
     </>

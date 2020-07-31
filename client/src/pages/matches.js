@@ -6,11 +6,11 @@ import MatchesComponent from "../components/MatchesComponent";
 
 const Matches = () => (
   <div className="container">
-    <Grid columns={2} stackable>
+    <Grid columns={2}>
       <Grid.Column width={4}>
         <SidebarNav />
       </Grid.Column>
-      <Grid.Column>
+      <Grid.Column width={10}>
         <MatchesComponent />
       </Grid.Column>
     </Grid>

@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
       },
       birthdate: {
-        type: Sequelize.DATEONLY,
+        type: Sequelize.DATE,
       },
       latitude: {
         type: Sequelize.DECIMAL(10, 7),

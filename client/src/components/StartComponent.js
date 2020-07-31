@@ -6,7 +6,7 @@ import Card from "./Card";
 import { UserContext } from "../context/UserContext";
 import UserService from "../services/user.service";
 
-const FriendZoneComponent = (props) => {
+const StartComponent = (props) => {
   const { currentUser } = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
@@ -62,4 +62,4 @@ const FriendZoneComponent = (props) => {
   );
 };
 
-export default FriendZoneComponent;
+export default StartComponent;
