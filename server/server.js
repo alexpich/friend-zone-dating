@@ -5,6 +5,10 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Socket and app server
+const server = app.listen(port, () => console.log(`Listening on port ${port}`));
+const io = require("socket.io")(server);
+
 var corsOptions = {
   origin: "http://localhost:3000",
 };
@@ -32,8 +36,36 @@ require("./routes/likes.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/userDetails.routes")(app);
 
+// Test route
+app.get("/", (req, res) => {
+  res.send("<h1>Hello world</h1>");
+});
+
+// Socket
+
+let interval;
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => getApiAndEmit(socket), 1000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    clearInterval(interval);
+  });
+});
+
+// Socket Emit
+const getApiAndEmit = (socket) => {
+  const response = new Date();
+  // Emitting a new message. Will be consumed by the client
+  socket.emit("FromAPI", response);
+};
+
 // Port
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+// app.listen(port, () => console.log(`Server listening on port ${port}`));
 
 // Create roles
 function initial() {
