@@ -23,11 +23,6 @@ const SidebarNav = () => {
             <Menu.Item as={NavLink} exact to="/profile" name="profile" />
           </Sidebar>
 
-          <Sidebar.Pusher>
-            <Segment basic>
-              <p>test</p>
-            </Segment>
-          </Sidebar.Pusher>
         </Grid.Column>
       </Grid>
     </>
