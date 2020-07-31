@@ -191,16 +191,16 @@ const SignupForm = (props) => {
 
           setSaved(true);
 
-          //  Dont Clear Form
-          // setUser(initialUserState);
-          
+          //  Clear Form
+          setUser(initialUserState);
+
           setError(false);
           setEmailError(false);
           setFirstNameError(false);
           setPasswordError(false);
         })
         .catch((e) => {
-          setUser(initialUserState);
+          // setUser(initialUserState);
           setError(true);
           setErrorMessage(e.response.data.message);
           setEmailError(initialErrorState.email);

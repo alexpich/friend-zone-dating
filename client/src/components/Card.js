@@ -57,6 +57,17 @@ const Card = (props) => {
     setNextProfile();
   };
 
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   // Gets the nearby profiles
   useEffect(() => {
     UserService.getTwentyUsersNearby(currentUser.id)
@@ -108,7 +119,9 @@ const Card = (props) => {
         <>
           <h2 className="name">
             {/* {profiles[0].firstName}, <span>Age</span> */}
-            {profile.firstName}, <span>Age</span>
+            {profile.firstName}, <span>{getAge(profile.birthdate)}</span>
+            {/* {Date.now()} */}
+            {/* {profile.firstName}, <span>{calculateAge(profile.birthdate)}</span> */}
           </h2>
           {/* <p>{profile[0].about}</p> */}
         </>

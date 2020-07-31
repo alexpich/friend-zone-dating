@@ -11,7 +11,7 @@ import NotSignedInRoute from "./components/NotSignedInRoute";
 
 // Pages
 import Home from "./pages/home";
-import FriendZone from "./pages/friendzone";
+import Start from "./pages/start";
 import Matches from "./pages/matches";
 import Messages from "./pages/messages";
 import Profile from "./pages/profile";
@@ -38,8 +38,8 @@ function App() {
                 <NotSignedInRoute exact path="/" component={Home} />
                 <ProtectedRoute
                   exact
-                  path="/friendzone"
-                  component={FriendZone}
+                  path="/start"
+                  component={Start}
                 />
                 <ProtectedRoute exact path="/matches" component={Matches} />
                 <ProtectedRoute exact path="/messages" component={Messages} />
