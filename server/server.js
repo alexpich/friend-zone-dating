@@ -17,13 +17,13 @@ const db = require("./models");
 const Role = db.role;
 
 // Use this one in prod, create initial user/admin roles manually
-db.sequelize.sync();
+// db.sequelize.sync();
 
 // We can use this one in dev to force drop all db
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-//   initial();
-// });
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+  initial();
+});
 
 // Routes
 require("./routes/auth.routes")(app);
