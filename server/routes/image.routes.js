@@ -15,9 +15,6 @@ module.exports = (app) => {
   // Create a new Image
   router.post("/", images.create);
 
-  // Retrieve all Images
-  //   router.get("/", images.findAll);
-
   // Retrieve all Images by userId
   router.get("/:id", images.findAllByUser);
 

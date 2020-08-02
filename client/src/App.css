@@ -96,3 +96,13 @@ body {
 .arrow--disabled {
   fill: rgba(255, 255, 255, 0.5);
 }
+
+/* Chat room */
+.chat-room-page {
+  width: 90vw;
+  margin: 0 auto;
+}
+.chat-box {
+  height: calc(100vh - 300px);
+  overflow-y: scroll;
+}

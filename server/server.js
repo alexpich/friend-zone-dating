@@ -35,6 +35,9 @@ require("./routes/image.routes")(app);
 require("./routes/likes.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/userDetails.routes")(app);
+var chatRoomRouter = require("./routes/chatRoom.routes");
+
+app.use("/chatroom", chatRoomRouter);
 
 // Test route
 app.get("/", (req, res) => {
@@ -42,27 +45,46 @@ app.get("/", (req, res) => {
 });
 
 // Socket
+// let interval;
 
-let interval;
+// io.on("connection", (socket) => {
+//   console.log("New client connected");
+//   if (interval) {
+//     clearInterval(interval);
+//   }
+//   interval = setInterval(() => getApiAndEmit(socket), 1000);
+//   socket.on("disconnect", () => {
+//     console.log("Client disconnected");
+//     clearInterval(interval);
+//   });
+// });
 
 io.on("connection", (socket) => {
-  console.log("New client connected");
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(() => getApiAndEmit(socket), 1000);
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-    clearInterval(interval);
+  socket.on("join", async (room) => {
+    socket.join(room);
+    io.emit("roomJoined", room);
+  });
+  socket.on("message", async (data) => {
+    const { chatRoomName, author, message } = data;
+    const chatRoom = await models.ChatRoom.findAll({
+      where: { name: chatRoomName },
+    });
+    const chatRoomId = chatRoom[0].id;
+    const chatMessage = await models.ChatMessage.create({
+      chatRoomId,
+      author,
+      message: message,
+    });
+    io.emit("newMessage", chatMessage);
   });
 });
 
 // Socket Emit
-const getApiAndEmit = (socket) => {
-  const response = new Date();
-  // Emitting a new message. Will be consumed by the client
-  socket.emit("FromAPI", response);
-};
+// const getApiAndEmit = (socket) => {
+//   const response = new Date();
+//   // Emitting a new message. Will be consumed by the client
+//   socket.emit("FromAPI", response);
+// };
 
 // Port
 // app.listen(port, () => console.log(`Server listening on port ${port}`));
@@ -79,3 +101,5 @@ function initial() {
     name: "admin",
   });
 }
+
+module.exports = app;

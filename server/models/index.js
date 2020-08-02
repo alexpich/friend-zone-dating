@@ -20,14 +20,13 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Models
-db.image = require("../models/image.model.js")(sequelize, Sequelize);
-db.like = require("../models/likes.model.js")(sequelize, Sequelize);
-db.role = require("../models/role.model.js")(sequelize, Sequelize);
-db.user = require("../models/user.model.js")(sequelize, Sequelize);
-db.userDetails = require("../models/userDetails.model.js")(
-  sequelize,
-  Sequelize
-);
+db.image = require("./image.model.js")(sequelize, Sequelize);
+db.like = require("./likes.model.js")(sequelize, Sequelize);
+db.role = require("./role.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
+db.userDetails = require("./userDetails.model.js")(sequelize, Sequelize);
+db.chatroom = require("./chatroom")(sequelize, Sequelize);
+db.chatroommessages = require("./chatroommessages")(sequelize, Sequelize);
 
 // Relations
 db.image.belongsTo(db.user);
